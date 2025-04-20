@@ -1,8 +1,17 @@
 html {
   color-scheme: light dark;
   font-family: system-ui;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
 }
+
+  
+  .title {
+	font-family:
+	  Greycliff CF,
+	  var(--mantine-font-family);
+	font-weight: 700;
+  }
+  
+  .gameGrid .word:nth-child(1) {
+	grid-row: span 4;
+  background-color: palegreen;
+  }

@@ -9,14 +9,24 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
+    "@hello-pangea/dnd": "^18.0.1",
     "@mantine/core": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
+    "@types/css-modules": "^1.0.5",
+    "autoprefixer": "^10.4.21",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-sortablejs": "^6.1.4",
+    "sortablejs": "^1.15.6",
+    "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "parcel": "^2.14.0"
+    "@types/sortablejs": "^1.15.8",
+    "parcel": "^2.14.0",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1"
   }
 }
