@@ -40,7 +40,10 @@ export default function Grid() {
 	const [activeId, setActiveId] = useState<string | null>(null);
 
 	return (
-		<DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+		<DndContext 
+		onDragStart={handleDragStart} 
+		onDragEnd={handleDragEnd}
+		>
 			<Group>{items}</Group>
 			<Group>
 				<DragOverlay>

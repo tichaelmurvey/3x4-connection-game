@@ -1,5 +1,5 @@
 import { AspectRatio, Center, Group } from "@mantine/core";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 
 interface ItemType {
@@ -18,9 +18,11 @@ const mockdata = [
 	{ id: "Cashback", color: "orange" },
 ];
 
-export default function Sortable(props: React.PropsWithChildren) {
+const blankData = mockdata.map((item) => ({ id: "", color: "white" }));
+
+export default function Game(props: React.PropsWithChildren) {
 	const [pool, setPool] = useState<ItemType[]>(mockdata);
-	const [grid, setGrid] = useState<ItemType[]>();
+	const [grid, setGrid] = useState<ItemType[]>(blankData);
 
 	return (
 		<Group >
@@ -32,16 +34,18 @@ export default function Sortable(props: React.PropsWithChildren) {
 					pull: true,
 					put: true,
 				}}
+				swap={true} // Enable swap plugin
 				list={grid || []}
 				setList={setGrid}
 				draggable=".word"
 				style={{...SortableGridStyles, ...GameGridStyles}}
 				animation={200}
 				delay={2}
+				swapThreshold = {0.5}
 				sort={false}>
 				{grid?.map((item, index) => (
 					<WordCard
-						key={`grid${item.id}`}
+						key={`grid${index}`}
 						word={item.id}
 						index={index}
 					/>
@@ -50,6 +54,7 @@ export default function Sortable(props: React.PropsWithChildren) {
 			</AspectRatio>
 			<AspectRatio>
 			<ReactSortable
+				swap={true}
 				group={{
 					name: "words",
 					pull: true,
@@ -113,3 +118,4 @@ const WordCardStyles: React.CSSProperties = {
 	transition: "box-shadow 150ms ease, transform 100ms ease",
 	userSelect: "none",
 };
+

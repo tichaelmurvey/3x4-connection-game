@@ -1,4 +1,4 @@
-import Sortable from "@/game/grid/Sortable";
+import { Game } from "@/game/gptAttempt/Game";
 import { AppShell, Burger, Group, MantineProvider, UnstyledButton } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
@@ -36,7 +36,22 @@ export function App() {
       <AppShell.Main>
 
             <h1>4x game</h1>
-            <Sortable />
+            <Game />
+  {/* <MultipleContainers
+    columns={3}
+    itemCount={9}
+    handle={false}
+    items={{
+      'pool' : ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
+      'grid' : ['X']
+    }}
+    strategy={rectSortingStrategy}
+    wrapperStyle={() => ({
+      width: 150,
+      height: 150,
+    })}
+    vertical
+  /> */}
         </AppShell.Main>
 
 			</AppShell>

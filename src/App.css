@@ -1,5 +1,6 @@
 html {
   color-scheme: light dark;
+  box-sizing: border-box;
   font-family: system-ui;
 }
 
