@@ -15,6 +15,39 @@
 				"Wizard of Oz song topics",
 				"Weather + medieval armament"
 			]
+		},
+		{
+			"id": 1,
+			"rainbow": "Till",
+			"groups": [
+				["Sow", "Plant"],
+				["Before", "Yet"],
+				["Kitty", "Safe"],
+				["Bens", "Er"]
+			],
+			"connections": [
+				"Famous non-country flags",
+				"Groups of seven",
+				"Wizard of Oz song topics",
+				"Weather + medieval armament"
+			]
+		},
+		{
+			"id": 1,
+			"rainbow": "Go",
+			"groups": [
+				["Chance", "Jail"],
+				["Turn", "Move"],
+				["Leave", "Bail"],
+				["X", "Mystery dungeon: explorers of darkness"]
+			],
+			"connections": [
+				"Monopoly squares",
+				"Your ___, in a board game",
+				"Abscond",
+				"Pokemon games"
+			]
 		}
+		
 	]
 }

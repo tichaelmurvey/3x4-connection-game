@@ -1,6 +1,5 @@
-import { Feedback, Solution } from "@/game/gptAttempt/gameLogic";
 import puzzles from "@/game/patterns/data/puzzles.json";
-import { gameConfig } from "@/game/patterns/model/config";
+import { gameConfig, viewConfig } from "@/game/patterns/model/config";
 import {
 	GameState,
 	initialGameState,
@@ -54,7 +53,7 @@ export function Game() {
 		await new Promise((resolve) => setTimeout(resolve, 500));
 		gameDispatch({
 			type: "INIT",
-			puzzle: puzzles.puzzles[0] as PuzzleSolution,
+			puzzle: puzzles.puzzles[2] as PuzzleSolution,
 			initialGameState,
 			gameConfig,
 		});
@@ -89,10 +88,10 @@ export function Game() {
 		<Container size="xl">
 			<Stack align="center" justify="flex-start">
 				<link rel="stylesheet" href="rainbow.scss" />
-				<h1>Fog of Four</h1>
+				<h1>One to Free Four</h1>
 				<p>Connect the groups of 3 to find the pivotal word</p>
 				<InputError>{gameState.submitError}</InputError>
-				{gameState.won ? "You've won!" : null}
+				{gameState.won && gameState.puzzleSolution ? <WinMessage gameState={gameState} /> : null}
 				{gameState.phase === "play" ||
 				gameState.phase === "won" ||
 				gameState.phase === "lost" ? (
@@ -137,39 +136,16 @@ export function Game() {
 }
 
 export function WinMessage({
-	solution,
-	feedback: winData,
+	gameState,
 }: {
-	solution: Solution;
-	feedback: Feedback;
+	gameState: GameState;
 }) {
-	const colorsAndConnections = Object.keys(winData)
-		.map((color) => {
-			const feedbackProp = winData[color as keyof Feedback];
-			if (
-				typeof feedbackProp === "string" &&
-				feedbackProp.includes("line") &&
-				Object.keys(solution).includes(feedbackProp)
-			) {
-				return {
-					color,
-					connection: solution[feedbackProp as keyof Solution],
-				};
-			}
-		})
-		.filter(
-			(obj) =>
-				obj && obj.color !== undefined && obj.connection !== undefined
-		) as unknown as { color: string; connection: string }[];
-
-	if (colorsAndConnections.length === 0) return null;
-	return (
-		<>
-			{colorsAndConnections.map(({ color, connection }) => (
-				<Blockquote color={color}>{connection}</Blockquote>
-			))}
+	const connections = gameState.puzzleSolution!.connections;
+	return (<>{connections.map((connection, i) => (
+			<Blockquote key={i} color="grey" bg={viewConfig.colors[gameState.groupStatus[i] || "cNeutral"] }>{connection}</Blockquote>
+		))}
 		</>
-	);
+	)
 }
 
 function GuessCounter({
