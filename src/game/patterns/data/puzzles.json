@@ -1,13 +1,19 @@
 {
 	"puzzles": [
 		{
-			"id": "1",
+			"id": 1,
 			"rainbow": "Rainbow",
 			"groups": [
-				["Tricolour", "Nordic Cross"],
-				["Major scale", "Week"],
-				["Witch", "Brain"],
-				["Internet", "Love"]
+				["Jolly Rodger", "Gadsden"],
+				["Week", "Major scale"],
+				["Witch", "Oz"],
+				["Snowblade", "Windshield"]
+			],
+			"connections": [
+				"Famous non-country flags",
+				"Groups of seven",
+				"Wizard of Oz song topics",
+				"Weather + medieval armament"
 			]
 		}
 	]

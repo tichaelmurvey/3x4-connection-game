@@ -1,11 +1,49 @@
-body {
-  overflow: hidden;
+.cRainbow {
+  border: 10px dashed transparent;
+  padding: 15px;
+  background: linear-gradient(to bottom right, #F2F2F2 0%, #F2F2F2 100%) padding-box center center no-repeat, linear-gradient(to bottom right, rgb(232, 121, 249) 0%, #FFC1CF 25%, #E8FFB7 50%, rgb(94, 234, 212) 75%, rgb(96, 165, 250) 100%) border-box top left no-repeat;
+  border-radius: 20px;
 }
 
-.rainbow {
+.cRainbowc1 {
+  border: 10px dashed transparent;
+  padding: 15px;
+  background: linear-gradient(to bottom right, #FFC1CF 0%, #FFC1CF 100%) padding-box center center no-repeat, linear-gradient(to bottom right, rgb(232, 121, 249) 0%, #FFC1CF 25%, #E8FFB7 50%, rgb(94, 234, 212) 75%, rgb(96, 165, 250) 100%) border-box top left no-repeat;
+  border-radius: 20px;
+}
+
+.cRainbowc2 {
+  border: 10px dashed transparent;
+  padding: 15px;
+  background: linear-gradient(to bottom right, #E879F9 0%, #E879F9 100%) padding-box center center no-repeat, linear-gradient(to bottom right, rgb(232, 121, 249) 0%, #FFC1CF 25%, #E8FFB7 50%, rgb(94, 234, 212) 75%, rgb(96, 165, 250) 100%) border-box top left no-repeat;
+  border-radius: 20px;
+}
+
+.cRainbowc3 {
+  border: 10px dashed transparent;
+  padding: 15px;
+  background: linear-gradient(to bottom right, #B7FFD8 0%, #B7FFD8 100%) padding-box center center no-repeat, linear-gradient(to bottom right, rgb(232, 121, 249) 0%, #FFC1CF 25%, #E8FFB7 50%, rgb(94, 234, 212) 75%, rgb(96, 165, 250) 100%) border-box top left no-repeat;
+  border-radius: 20px;
+}
+
+.cRainbowc4 {
+  border: 10px dashed transparent;
+  padding: 15px;
+  background: linear-gradient(to bottom right, #C4F5FC 0%, #C4F5FC 100%) padding-box center center no-repeat, linear-gradient(to bottom right, rgb(232, 121, 249) 0%, #FFC1CF 25%, #E8FFB7 50%, rgb(94, 234, 212) 75%, rgb(96, 165, 250) 100%) border-box top left no-repeat;
+  border-radius: 20px;
+}
+
+.cRainbowcNeutral {
+  border: 10px dashed transparent;
+  padding: 15px;
+  background: linear-gradient(to bottom right, #F2F2F2 0%, #F2F2F2 100%) padding-box center center no-repeat, linear-gradient(to bottom right, rgb(232, 121, 249) 0%, #FFC1CF 25%, #E8FFB7 50%, rgb(94, 234, 212) 75%, rgb(96, 165, 250) 100%) border-box top left no-repeat;
+  border-radius: 20px;
+}
+
+.cRainbow-locked {
   text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.8);
 }
-.rainbow:before, .rainbow:after {
+.cRainbow-locked:before, .cRainbow-locked:after {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -14,12 +52,12 @@ body {
   background-size: 400% 400%;
   background: linear-gradient(50deg, #B7FFD8, #E8FFB7, #FFC1CF, #C4F5FC);
 }
-.rainbow:before {
+.cRainbow-locked:before {
   filter: blur(7px);
   transition: all 0.25s ease;
   animation: pulse 10s infinite ease;
 }
-.rainbow:after {
+.cRainbow-locked:after {
   filter: blur(0.3px);
 }
 
@@ -68,31 +106,6 @@ body {
   font-weight: 500;
   color: black;
   text-transform: uppercase;
-}
-
-.author-container {
-  position: absolute;
-  width: 50%;
-  right: 21px;
-  bottom: 21px;
-  text-align: right;
-}
-.author-container .picture {
-  position: absolute;
-  right: 0;
-  top: -42px;
-  margin-top: -12px;
-  width: 42px;
-  height: 42px;
-  background-size: 42px;
-  background-position: center;
-  background-repeat-style: "no-repeat";
-  background-image: url(https://assets.codepen.io/595576/internal/avatars/users/default.png?format=auto&version=1689877807&width=80&height=80);
-}
-.author-container .title {
-  font-size: 16px;
-  letter-spacing: 2px;
-  color: black;
 }
 
 /*# sourceMappingURL=rainbow.css.map */

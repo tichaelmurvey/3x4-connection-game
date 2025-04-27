@@ -1,4 +1,4 @@
-import { Game } from "@/game/gptAttempt/Game";
+import { Game } from "@/game/patterns/view/Game";
 import { AppShell, Burger, Group, MantineProvider, UnstyledButton } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";

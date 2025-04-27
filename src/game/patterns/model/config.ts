@@ -9,7 +9,7 @@ export const viewConfig = {
 		cNeutral: "#F2F2F2",
 		cRainbow: "transparent",
 		c1: "#FFC1CF", 
-		c2: "#E8FFB7", 
+		c2: "#E879F9", 
 		c3: "#B7FFD8", 
 		c4: "#C4F5FC"
 	},
@@ -21,3 +21,8 @@ export type GameConfig = {
 	yGrid: number;
 	maxGuesses: number;
 }
+
+// c1: "#FFC1CF", 
+// 		c2: "#E8FFB7", 
+// 		c3: "#B7FFD8", 
+// 		c4: "#C4F5FC"

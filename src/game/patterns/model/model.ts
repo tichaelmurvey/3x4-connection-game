@@ -26,6 +26,7 @@ export type PuzzleSolution = {
 	id: number;
 	rainbow: string;
 	groups: [string, string][];
+	connections: string[];
 }
 
 
@@ -34,6 +35,7 @@ export type GameState = {
 	puzzleId: number;
 	cells: Cell[];
 	guessesRemaining: number;
+	maxGuesses: number;
 	won: boolean;
 	multiGroupColors: ColorIndex[];
 	colorCycle: ColorIndex[];
@@ -43,6 +45,7 @@ export type GameState = {
 		[key: number]: false | ColorIndex;
 	}
 	submitError: string | null;
+	submitValid: boolean;
 	puzzleSolution: PuzzleSolution | null;
 }
 
@@ -51,6 +54,7 @@ export const initialGameState: GameState = {
 	puzzleId: -1,
 	cells: [],
 	guessesRemaining: gameConfig.maxGuesses,
+	maxGuesses: gameConfig.maxGuesses,
 	won: false,
 	rainbowStatus: false,
 	multiGroupColors: ["c1", "c2", "c3", "c4"],
@@ -63,6 +67,7 @@ export const initialGameState: GameState = {
 		3: false,
 	},
 	submitError: null,
+	submitValid: false,
 	puzzleSolution: null,
 }
 

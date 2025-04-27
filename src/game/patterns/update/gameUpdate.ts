@@ -1,9 +1,12 @@
 import { GameConfig } from "@/game/patterns/model/config";
-import { Cell, ColorIndex, GameState, initialCell, LockableCategoryId, PuzzleSolution } from "@/game/patterns/model/model";
+import { Cell, GameState, initialCell, LockableCategoryId, PuzzleSolution } from "@/game/patterns/model/model";
+import { changeColor } from "@/game/patterns/update/changeColor";
+import { checkGroups, checkRainbow } from "@/game/patterns/update/checkGroups";
+import { validateGuesses } from "@/game/patterns/update/validateGuesses";
 
-export type Action = InitAction | SubmitAction | ChangeColorAction;
+export type Action = InitAction | SubmitAction | ChangeColorAction | ClearCells;
 
-type ChangeColorAction = {
+export type ChangeColorAction = {
 	type: "CHANGE_COLOR";
 	cellId: number;
 }
@@ -19,6 +22,10 @@ type InitAction = {
 	gameConfig: GameConfig;
 }
 
+type ClearCells = {
+	type: "CLEAR_CELLS";
+}
+
 
 
 export const gameUpdate = (gameState: GameState, action: Action) => {
@@ -30,7 +37,10 @@ export const gameUpdate = (gameState: GameState, action: Action) => {
 			return submitAnswer(gameState, action);
 		
 		case "CHANGE_COLOR":
-			return changeColor(gameState, action);
+			return isValidSubmit(changeColor(gameState, action));
+
+		case "CLEAR_CELLS":
+			return clearNonLockedCells(gameState);
 
 		default:
 			throw new Error("Invalid action type");
@@ -71,51 +81,6 @@ function createCells(puzzle: PuzzleSolution, gameConfig: GameConfig) : Cell[] {
 	return cells;
 }
 
-function changeColor(gameState: GameState, action: ChangeColorAction) : GameState {
-
-	if(gameState.phase !== "play") {
-		console.log("Game is not in play");
-		return gameState;
-	}
-
-	const newGameState = structuredClone(gameState);
-	const cell = newGameState.cells[action.cellId];
-
-	if(cell.locked) {
-		const lockedCellGroupColor = newGameState.groupStatus[cell.lockedGroup];
-		
-		if(lockedCellGroupColor === false) {
-			throw new Error("Cell is locked but group color could not be found");
-		}
-
-		if(newGameState.rainbowStatus){
-			console.log("can't change color");
-			return newGameState;
-		}
-		
-		else if(cell.lockedGroup !== "rainbow" && cell.colorName === "cRainbow"){
-			cell.colorName = lockedCellGroupColor;
-		}
-
-		else if (cell.lockedGroup === "rainbow" &&cell.colorName === lockedCellGroupColor) {
-			cell.colorName = "cRainbow";
-		}
-		return newGameState;
-	}
-	
-	//if not locked, just go to next color
-	const currentColor = cell.colorName;
-	cell.colorName = findNextColor(currentColor, gameState.colorCycle);
-	return newGameState;
-}
-
-
-function findNextColor(currentColor: ColorIndex, colorCycle: ColorIndex[]): ColorIndex {
-	const currentIndex = colorCycle.indexOf(currentColor);
-	const nextIndex = (currentIndex + 1) % colorCycle.length;
-	return colorCycle[nextIndex];
-}
-
 function submitAnswer(gameState: GameState, action: SubmitAction) {
 	if(gameState.phase !== "play") {
 		console.log("Game is not in play");
@@ -131,90 +96,60 @@ function submitAnswer(gameState: GameState, action: SubmitAction) {
 	//check if any colours have too many guesses
 	newGameState = validateGuesses(newGameState);
 	if(newGameState.submitError) return newGameState;
+
 	//check rainbows
 	newGameState = checkRainbow(newGameState);
 	
 	//check solution for each group
 	newGameState = checkGroups(newGameState);
 
+	//check if input cost any lives
+	newGameState = checkWrongGuesses(newGameState);
+
+	//clear colour of non-locked cells
+	newGameState = clearNonLockedCells(newGameState);
+
 	return newGameState;
 }
 
-function checkRainbow(gameState: GameState) {
-	//check if rainbow has been solved
-	if(gameState.rainbowStatus) return gameState;
-	
-	const rainbowColoredCells = gameState.cells.filter((cell) => cell.colorName === "cRainbow");
-
-	if (rainbowColoredCells.length > 1) {
-		gameState.submitError = "You can't submit a guess with more than one rainbow tile";
-		return gameState;
+function checkWrongGuesses(gameState: GameState) : GameState {
+	console.log("checking wrong guesses");
+	let guessedWrong = false;
+	for (const cell of gameState.cells) {
+		if (guessedWrong) continue;
+		console.log("checking cell", cell, cell.locked, cell.colorName);
+		if (cell.locked) continue;
+		if (cell.colorName === "cNeutral") continue;
+		console.log("guessed wrong on", cell);
+		guessedWrong = true;
 	}
-
-	if(rainbowColoredCells.length === 0) return gameState;
-
-	const rainbowCell = rainbowColoredCells[0];
-	
-	if(rainbowCell.groupId === "rainbow") {
-		gameState.rainbowStatus = true;
-		rainbowCell.locked = true;
+	if (guessedWrong) {
+		console.log("subtracting guess");
+		gameState.guessesRemaining--;
 	}
 	return gameState;
 }
 
-function validateGuesses(gameState: GameState) : GameState {
-	for (const color of gameState.multiGroupColors) {
-		const guesses = gameState.cells.filter((cell) => cell.colorName === color).length;
-		
-		if(guesses > 3) gameState.submitError = 
-		`You can't submit a guess with more than 3 ${color} tiles.`;
-		
-		if(guesses === 3 && gameState.rainbowStatus) gameState.submitError = 
-		`You can't submit a guess with 3 ${color} tiles, you've already solved the rainbow tile.`;
-		
-		if(guesses === 3 && gameState.cells.filter((cell) => cell.colorName === "cRainbow").length === 1) gameState.submitError = 
-		`You can't submit a guess with 3 ${color} tiles and a rainbow tile.`;
-	}	
-	return gameState;
+function clearNonLockedCells(gameState: GameState) : GameState {
+	console.log("checking non-locked cells");
+	const newGameState = structuredClone(gameState);
+	console.log(newGameState.cells);
+	newGameState.cells = newGameState.cells.map((cell) => {
+		if (cell.locked) return cell;
+		cell.colorName = "cNeutral";
+		return cell;
+	});
+	console.log(newGameState.cells);
+	newGameState.submitValid = true;
+	return newGameState;
 }
-	
 
-function checkGroups(gameState: GameState) : GameState {
-	for (let groupId = 0; groupId < gameState.puzzleSolution!.groups.length; groupId++) {
-		
-		//Check if group has been solved
-		if(gameState.groupStatus[groupId]) continue;
-		
-		//find cells in group
-		const groupCells = gameState.cells.filter((cell) => cell.groupId === groupId);
-		
-		//check if they match colour
-		if(groupCells[0].colorName === "cNeutral" || groupCells[0].colorName !== groupCells[1].colorName) continue;
-
-		//check if rainbow is the same colour
-		if(!gameState.rainbowStatus){ 
-			const rainbowCell = gameState.cells.find((cell) => cell.groupId === "rainbow");
-			if(!rainbowCell) continue;
-			if(rainbowCell.colorName !== groupCells[0].colorName) continue;
-			rainbowCell.locked = true;
-			rainbowCell.lockedGroup = groupId as LockableCategoryId;
-			continue;
-		}
-		gameState.groupStatus[groupId] = groupCells[0].colorName;
-		[groupCells[0], groupCells[1]].forEach((cell) => {
-			cell.locked = true
-			cell.lockedGroup = groupId as LockableCategoryId;
-		});
+export function isValidSubmit(gameState: GameState){
+	const testGameState = submitAnswer(gameState, {type: "SUBMIT"});
+	gameState.submitValid = true;
+	if(testGameState.submitError) {
+		gameState.submitValid = false;
 	}
-	//check if all groups have been solved
-	gameState.won = Object.keys(gameState.groupStatus).every((groupId) => gameState.groupStatus[groupId as LockableCategoryId]);
-	if(gameState.won) {
-		gameState.phase = "won";
-		return gameState;
-	}
-
-	//remove solved groups from colours without group
-	const solvedColors = Object.values(gameState.groupStatus).filter((color) => color !== false);
-	gameState.colorCycle = gameState.colorCycle.filter((color) => !solvedColors.includes(color));
+	console.log("isValidSubmit", gameState.submitValid, testGameState.submitError);
 	return gameState;
 }

@@ -1,15 +1,51 @@
 $purple: rgb(232 121 249);
 $blue: rgb(96 165 250);
 $green: rgb(94 234 212);
+$pink: #FFC1CF;
+$yellow: #E8FFB7;
+
+$cNeutral: #F2F2F2;
+$c1: #FFC1CF;
+$c2: #E879F9;
+$c3: #B7FFD8;
+$c4: #C4F5FC;
+
 
 $animationtime: 45s;
 $length: 25;
 
-body {
-	overflow: hidden;
+@mixin rainbowBorder($color) {
+	border: 10px dashed transparent;
+	padding: 15px;
+	background: 
+		linear-gradient(to bottom right, $color 0%, $color 100%) padding-box center center no-repeat,
+	  linear-gradient(to bottom right, $purple 0%, $pink 25%, $yellow 50%, $green 75%, $blue 100%) border-box top left no-repeat;
+	  border-radius: 20px;
 }
 
-.rainbow {
+.cRainbow {
+	@include rainbowBorder($cNeutral);
+}
+
+.cRainbowc1 {
+	@include rainbowBorder($c1);
+}
+.cRainbowc2 {
+	@include rainbowBorder($c2);
+}
+.cRainbowc3 {
+	@include rainbowBorder($c3);
+}
+.cRainbowc4 {
+	@include rainbowBorder($c4);
+}
+.cRainbowcNeutral {
+	@include rainbowBorder($cNeutral);
+}
+
+
+
+.cRainbow-locked{
 	text-shadow: 3px 3px 10px rgba(255,255,255,.8);
 	&:before, &:after {
 	  position: absolute;
@@ -77,30 +113,5 @@ body {
 		font-weight: 500;
 		color: black;
 		text-transform: uppercase;
-	}
-}
-.author-container {
-	$width: 42px;
-	position: absolute;
-	width: 50%;
-	right: $width/2;
-	bottom: $width/2;
-	text-align: right;
-	.picture {
-		position: absolute;
-		right: 0;
-		top: -$width;
-		margin-top: -12px;
-		width: $width;
-		height: $width;
-		background-size: $width;
-		background-position: center;
-		background-repeat-style: "no-repeat";
-		background-image: url(https://assets.codepen.io/595576/internal/avatars/users/default.png?format=auto&version=1689877807&width=80&height=80);
-	}
-	.title {
-		font-size: 16px;
-		letter-spacing: 2px;
-		color: black;
 	}
 }

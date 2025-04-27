@@ -1,13 +1,13 @@
-import { SortableItem } from "@/game/gptAttempt/Draggable";
-import { Item } from "@/game/gptAttempt/Game";
+import { Cell } from "@/game/patterns/model/model";
+import { SortableItem } from "@/game/patterns/view/Draggable";
 import { SimpleGrid } from "@mantine/core";
 
 export function GridBoard({
 	itemIds,
-	items
+	cells
 }: {
 	itemIds: number[];
-	items: Item[]
+	cells: Cell[]
 }) {
 	return (
 			<SimpleGrid
@@ -24,7 +24,7 @@ export function GridBoard({
 					<SortableItem
 						key={id}
 						id={id}
-						item={items[id]}
+						cell={cells[id]}
 					 />
 				))}
 			</SimpleGrid>

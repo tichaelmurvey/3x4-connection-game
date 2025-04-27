@@ -1,5 +1,5 @@
-import { DraggableCard } from "@/game/gptAttempt/Draggable";
-import { colors, Item } from "@/game/gptAttempt/Game";
+import { DraggableCard } from "@/game/patterns/view/Draggable";
+import { colors, Item } from "@/game/patterns/view/Game";
 import { useDroppable } from "@dnd-kit/react";
 import { AspectRatio, Card } from "@mantine/core";
 import React from "react";

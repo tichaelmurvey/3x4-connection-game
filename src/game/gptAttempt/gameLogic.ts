@@ -1,4 +1,4 @@
-import { GameState, solution } from "@/game/gptAttempt/Game";
+import { GameState, solution } from "@/game/patterns/view/Game";
 
 export function shuffle(array: any[]) {
 	console.log("shuffle!")
