@@ -3,6 +3,7 @@ import { AppShell, Burger, Group, MantineProvider, UnstyledButton } from "@manti
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import "./App.css";
+import "./rainbow.css";
 
 export function App() {
   const [opened, { toggle }] = useDisclosure();
@@ -12,7 +13,7 @@ export function App() {
 			<AppShell
             header={{ height: 60 }}
             navbar={{ width: 300, breakpoint: 'sm', collapsed: { desktop: true, mobile: !opened } }}
-            padding="md"
+            padding="xs"
       >
               <AppShell.Header>
         <Group h="100%" px="md">
@@ -34,8 +35,6 @@ export function App() {
         <UnstyledButton >Support</UnstyledButton>
       </AppShell.Navbar>
       <AppShell.Main>
-
-            <h1>4x game</h1>
             <Game />
   {/* <MultipleContainers
     columns={3}

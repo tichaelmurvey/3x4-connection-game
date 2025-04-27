@@ -1,0 +1,98 @@
+body {
+  overflow: hidden;
+}
+
+.rainbow {
+  text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.8);
+}
+.rainbow:before, .rainbow:after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  z-index: -1;
+  background-size: 400% 400%;
+  background: linear-gradient(50deg, #B7FFD8, #E8FFB7, #FFC1CF, #C4F5FC);
+}
+.rainbow:before {
+  filter: blur(7px);
+  transition: all 0.25s ease;
+  animation: pulse 10s infinite ease;
+}
+.rainbow:after {
+  filter: blur(0.3px);
+}
+
+@keyframes slide {
+  from {
+    right: -25vw;
+  }
+  to {
+    right: 125vw;
+  }
+}
+.h {
+  box-shadow: 0 0 50vh 40vh white;
+  width: 100vw;
+  height: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+.v {
+  box-shadow: 0 0 35vw 25vw white;
+  width: 0;
+  height: 100vh;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+.description-container {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  text-align: left;
+  letter-spacing: 3px;
+}
+.description-container .title {
+  font-size: 19px;
+  font-weight: 500;
+  color: black;
+  text-transform: uppercase;
+}
+.description-container .subtitle {
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: 500;
+  color: black;
+  text-transform: uppercase;
+}
+
+.author-container {
+  position: absolute;
+  width: 50%;
+  right: 21px;
+  bottom: 21px;
+  text-align: right;
+}
+.author-container .picture {
+  position: absolute;
+  right: 0;
+  top: -42px;
+  margin-top: -12px;
+  width: 42px;
+  height: 42px;
+  background-size: 42px;
+  background-position: center;
+  background-repeat-style: "no-repeat";
+  background-image: url(https://assets.codepen.io/595576/internal/avatars/users/default.png?format=auto&version=1689877807&width=80&height=80);
+}
+.author-container .title {
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: black;
+}
+
+/*# sourceMappingURL=rainbow.css.map */

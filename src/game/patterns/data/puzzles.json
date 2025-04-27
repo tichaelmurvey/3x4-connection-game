@@ -1,0 +1,14 @@
+{
+	"puzzles": [
+		{
+			"id": "1",
+			"rainbow": "Rainbow",
+			"groups": [
+				["Tricolour", "Nordic Cross"],
+				["Major scale", "Week"],
+				["Witch", "Brain"],
+				["Internet", "Love"]
+			]
+		}
+	]
+}

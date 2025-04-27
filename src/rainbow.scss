@@ -1,0 +1,106 @@
+$purple: rgb(232 121 249);
+$blue: rgb(96 165 250);
+$green: rgb(94 234 212);
+
+$animationtime: 45s;
+$length: 25;
+
+body {
+	overflow: hidden;
+}
+
+.rainbow {
+	text-shadow: 3px 3px 10px rgba(255,255,255,.8);
+	&:before, &:after {
+	  position: absolute;
+	  //border-radius: 10em;
+	  //transform: translateX(-50%) translateY(-50%);
+	  width: 100%;
+	  height: 100%;
+	  content: '';
+	  z-index: -1;
+	  background-size: 400% 400%;
+	  background: linear-gradient(50deg, #B7FFD8, #E8FFB7, #FFC1CF, #C4F5FC);
+	}
+	&:before {
+	  filter: blur(7px);
+	  transition: all .25s ease;
+	  animation: pulse 10s infinite ease;
+	}
+	&:after {
+	  filter: blur(0.3px);
+	}
+  
+}
+@keyframes slide {
+	from {
+		right: -25vw;
+	}
+	to {
+		right: 125vw;
+	}
+}
+
+.h {
+	box-shadow: 0 0 50vh 40vh white;
+	width: 100vw;
+	height: 0;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+}
+.v {
+	box-shadow: 0 0 35vw 25vw white;
+	width: 0;
+	height: 100vh;
+	bottom: 0;
+	left: 0;
+	position: absolute;
+}
+
+// DESCRIPTION (delete me if needed)
+.description-container {
+	position: absolute;
+	bottom: 32px;
+	left: 32px;
+	text-align: left;
+	letter-spacing: 3px;
+	.title {
+		font-size: 19px;
+		font-weight: 500;
+		color: black;
+		text-transform: uppercase;
+	}
+	.subtitle {
+		margin-top: 6px;
+		font-size: 26px;
+		font-weight: 500;
+		color: black;
+		text-transform: uppercase;
+	}
+}
+.author-container {
+	$width: 42px;
+	position: absolute;
+	width: 50%;
+	right: $width/2;
+	bottom: $width/2;
+	text-align: right;
+	.picture {
+		position: absolute;
+		right: 0;
+		top: -$width;
+		margin-top: -12px;
+		width: $width;
+		height: $width;
+		background-size: $width;
+		background-position: center;
+		background-repeat-style: "no-repeat";
+		background-image: url(https://assets.codepen.io/595576/internal/avatars/users/default.png?format=auto&version=1689877807&width=80&height=80);
+	}
+	.title {
+		font-size: 16px;
+		letter-spacing: 2px;
+		color: black;
+	}
+}

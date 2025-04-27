@@ -4,30 +4,35 @@
   "version": "0.0.0",
   "source": "src/index.html",
   "scripts": {
-    "start": "parcel",
+    "sass": "sass --watch src/rainbow.scss src/rainbow.css",
+    "start": "concurrently --kill-others \"npm run sass\" \"npx parcel\"",
     "build": "parcel build"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/react": "^0.1.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@mantine/core": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
     "@types/css-modules": "^1.0.5",
+    "@types/react-dnd": "^2.0.36",
     "autoprefixer": "^10.4.21",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-sortablejs": "^6.1.4",
     "sortablejs": "^1.15.6",
     "tailwindcss": "^4.1.4",
-    "typescript-plugin-css-modules": "^5.1.0"
+    "typescript-plugin-css-modules": "^5.1.0",
+    "use-fit-text": "^2.4.0"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.14.4",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/sortablejs": "^1.15.8",
+    "concurrently": "^9.1.2",
     "parcel": "^2.14.0",
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "^1.17.0",

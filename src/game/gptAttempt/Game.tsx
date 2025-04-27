@@ -1,243 +1,237 @@
+import CheckButtons from "@/game/gptAttempt/Checkline";
+import { checkAnswers, Feedback, isActiveColor, shuffle, Solution } from "@/game/gptAttempt/gameLogic";
+import { GridBoard } from "@/game/gptAttempt/GridBoard";
 import {
+	closestCenter,
 	DndContext,
 	DragEndEvent,
-	DragStartEvent,
-	useDraggable,
-	useDroppable,
+	DragOverEvent,
+	KeyboardSensor,
+	MouseSensor,
+	TouchSensor,
+	useSensor,
+	useSensors,
 } from "@dnd-kit/core";
 import {
-	AspectRatio,
-	Card,
-	Center,
-	Container,
-	SimpleGrid,
-	Stack,
-	Title,
-} from "@mantine/core";
-import React, { useState } from "react";
+	arraySwap,
+	rectSwappingStrategy,
+	SortableContext
+} from "@dnd-kit/sortable";
+import { Blockquote, Container, InputError, Stack } from "@mantine/core";
+import { createContext, useEffect, useRef, useState } from "react";
 
-const initialPool = Array.from({ length: 9 }, (_, i) => ({
-	id: `pool-${i}`,
-	label: `example${i + 1}`,
-}));
-const initialGame = Array.from({ length: 9 }, (_, i) => ({
-	id: `game-${i}`,
-	label: "",
-}));
-
-type Item = {
-	id: string;
-	label: string;
+export const solution: Solution = {
+	rainbow: {
+		words: ["Rainbow"],
+	},
+	line1: {
+		words: ["Tricolour", "Nordic Cross"],
+		connection: "Flag patterns",
+	},
+	line2: {
+		words: ["Major scale", "Week"],
+		connection: "Sets of seven",
+	},
+	line3: {
+		words: ["Witch", "Brain"],
+		connection: "Song topics in The Wizard of Oz",
+	},
+	line4: {
+		words: ["Internet", "Love"],
+		connection: "Types of Connection",
+	},
 };
 
-function DraggableCard({ item, activeId }: { item: Item, activeId: string | null }) {
-	const { attributes, listeners, setNodeRef, transform, isDragging } =
-		useDraggable({ id: item.id });
+export const words = Object.keys(solution).flatMap((key) => solution[key as keyof Solution].words);
 
-	const style: React.CSSProperties = {
-		transform: transform
-			? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-			: undefined,
-		opacity: isDragging ? 0.8 : 1,
-		cursor: "grab",
-		// width: "100%",
-		// height: "100%",
-		zIndex: isDragging ? 10 : "auto", // <-- z-index adjustment here
-		position: item.id === activeId ? "relative" : "static", // <-- ensure z-index applies properly
-	};
 
-	if (!item.label) {
-		return null;
+export type Item = {
+	id: string;
+	index: number;
+	label: string;
+	locked?: boolean;
+};
+
+export const colors = {
+	pink: "#FFC1CF",
+	yellow: "#E8FFB7",
+	purple: "#E2A0FF",
+	blue: "#C4F5FC",
+	green: "#B7FFD8",
+	grey: "#F2F2F2",
+	rainbow: "transparent",
+	cycle: [] as string[]
+};
+
+const initialGameItems = Array.from({ length: 9 }, (_, i) => ({
+	id: `game-${i}-${words[i]}`,
+	index: i,
+	label: words[i],
+	color: colors.grey,
+}));
+
+const initialIds = [
+	0,1,2,3,4,5,6,7,8
+];
+
+colors.cycle = ["grey", "green", "yellow", "pink", "blue", "rainbow"];
+
+
+export type GameStateItem = {
+	label: string;
+	locked?: boolean;
+}
+
+export type GameState = {
+	cellData: {
+		pink: GameStateItem[];
+		yellow: GameStateItem[];
+		green: GameStateItem[];
+		blue: GameStateItem[];
+		rainbow: GameStateItem[];
+	}
+	openColors: {
+		pink: boolean;
+		yellow: boolean;
+		green: boolean;
+		blue: boolean;
+		rainbow: boolean;
+	},
+	colorOrder: string[];
+}
+
+export const GameContext = createContext<[GameState, React.Dispatch<React.SetStateAction<GameState>>, string[]]>(null as any);
+
+export function Game() {
+	const gameItems = useRef<Item[]>(initialGameItems);
+	const [itemIds, setItemIds] = useState<number[]>([]);
+	const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+	const [winData, setWinData] = useState<Feedback | undefined>(undefined);
+	const [colorCycle, setColorCycle] = useState<string[]>(colors.cycle);
+	useEffect(() => {
+		console.log("itemIds effect", itemIds);
+		setItemIds(shuffle(initialIds));
+	}, []);
+
+	const [gameState, setGameState] = useState<GameState>({
+		cellData: {green: [],
+		yellow: [],
+		pink: [],
+		blue: [],
+		rainbow: []},
+		openColors: {
+			green: true,
+			yellow: true,
+			pink: true,
+			blue: true,
+			rainbow: true
+		},
+		colorOrder: ["grey","green", "yellow", "pink", "blue", "rainbow"]
+	});
+	console.log("rendering game", gameState);
+	function handleDragOver(event: DragOverEvent) {
+		console.log("handleDragOver", event);
+	}
+	function handleDragEnd(event: DragEndEvent) {
+		console.log("handleDragEnd", event);
+		const { active, over } = event;
+		if (!active || !active.data || !over || !over.data) {
+			return;
+		}
+		// const activeData = active.data as unknown as Item;
+		// const overData = over.data as unknown as Item;
+		if (active.id !== over.id) {
+			setItemIds((itemIds) => {
+				const oldIndex = itemIds.indexOf(active.id as number);
+				const newIndex = itemIds.indexOf(over.id as number);
+
+				return arraySwap(itemIds, oldIndex, newIndex);
+			});
+		}
+	}
+	function handleSubmitAnswers() {
+		const feedback = checkAnswers(gameState);
+		console.log("feedback", feedback);
+		if (feedback.status === "error") {
+			setErrorMessage(feedback.errorMessage);
+		}
+		else {
+			setErrorMessage(undefined);
+		}
+		if (feedback.status === "completed") {
+			setWinData(feedback);
+		} else {
+			//lock all items which have been solved
+			const newState = structuredClone(gameState);
+			for (const color in newState.cellData) {
+				if (!isActiveColor(color)) continue;
+				if(feedback[color]) {
+					newState.cellData[color].forEach((item) => item.locked = true);
+					newState.openColors[color] = false;
+				}
+			}
+			console.log("newState", newState);
+			setGameState(newState);
+		}
 	}
 
 	return (
-		<AspectRatio ratio={1}>
-			<div ref={setNodeRef} style={style} {...listeners} {...attributes}>
-				<Card
-					shadow="lg"
-					style={{
-						height: "100%",
-						width: "100%",
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						fontSize: 18,
-						backgroundColor: "#f0f0f0",
-					}}>
-					{item.label}
-				</Card>
-			</div>
-		</AspectRatio>
-	);
-}
-
-function DroppableSlot({
-	item,
-	activeId,
-	isGameGrid,
-}: {
-	item: Item;
-	activeId: string | null;
-	isGameGrid: boolean;
-}) {
-	const { isOver, setNodeRef } = useDroppable({ id: item.id });
-	const isActive = activeId !== null;
-	const shouldHighlight = isGameGrid && isActive;
-	const borderWidth = 8;
-	const style: React.CSSProperties = {
-		position: "relative",
-		backgroundColor: item.id === activeId ? "#efa234" : 
-		isOver ? "#1a9975" : undefined,
-		height: "100%",
-		borderRadius: "20px",
-		border:
-			item.label
-				? "0"
-				: shouldHighlight
-				? `${borderWidth}px dashed rgb(149, 127, 127)`
-				: `${borderWidth}px dashed #aaaaaa`,
-
-		transition: "background-color 0.2s, border-color 0.2s",
-	};
-
-	return (
-		<div ref={setNodeRef} style={style}>
-			{item.label ? <DraggableCard item={item} activeId={activeId} /> :
-
-			<AspectRatio ratio={1} >
-				<Card
-					padding="md"
-					bg="none"
-					style={{
-						height: "100%",
-						width: "100%",
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						
-					}}></Card>
-			</AspectRatio>}
-		</div>
-	);
-}
-
-function GridBoard({
-	items,
-	activeId,
-	isGameGrid,
-}: {
-	items: Item[];
-	activeId: string | null;
-	isGameGrid: boolean;
-}) {
-	return (
-		<AspectRatio ratio={1}>
-			{/* <Center w="100%" h="100%"> */}
-			<SimpleGrid
-				cols={3}
-				style={{
-					justifyContent: "center",
-					alignItems: "center",
-				}}>
-				{items.map((item) => (
-					<DroppableSlot
-						key={item.id}
-						item={item}
-						activeId={activeId}
-						isGameGrid={isGameGrid}
-					/>
-				))}
-			</SimpleGrid>
-			{/* </Center> */}
-		</AspectRatio>
-	);
-}
-
-export function Game() {
-	const [poolItems, setPoolItems] = useState<Item[]>(initialPool);
-	const [gameItems, setGameItems] = useState<Item[]>(initialGame);
-	const [activeId, setActiveId] = useState<string | null>(null);
-
-	const findItemById = (id: string) => {
-		const poolIndex = poolItems.findIndex((item) => item.id === id);
-		if (poolIndex !== -1) return { location: "pool", index: poolIndex };
-		const gameIndex = gameItems.findIndex((item) => item.id === id);
-		if (gameIndex !== -1) return { location: "game", index: gameIndex };
-		return null;
-	};
-
-	const handleDragStart = (event: DragStartEvent) => {
-		setActiveId(String(event.active.id));
-	};
-
-	const handleDragEnd = (event: DragEndEvent) => {
-		const { active, over } = event;
-		setActiveId(null);
-		if (!over) return;
-
-		const activeItem = findItemById(String(active.id));
-		const overItem = findItemById(String(over.id));
-
-		if (!activeItem || !overItem) return;
-
-		const newPool = [...poolItems];
-		const newGame = [...gameItems];
-
-		if (activeItem.location === "pool" && overItem.location === "pool") {
-			[newPool[activeItem.index], newPool[overItem.index]] = [
-				newPool[overItem.index],
-				newPool[activeItem.index],
-			];
-		} else if (
-			activeItem.location === "pool" &&
-			overItem.location === "game"
-		) {
-			[newPool[activeItem.index], newGame[overItem.index]] = [
-				newGame[overItem.index],
-				newPool[activeItem.index],
-			];
-		} else if (
-			activeItem.location === "game" &&
-			overItem.location === "pool"
-		) {
-			[newGame[activeItem.index], newPool[overItem.index]] = [
-				newPool[overItem.index],
-				newGame[activeItem.index],
-			];
-		} else if (
-			activeItem.location === "game" &&
-			overItem.location === "game"
-		) {
-			[newGame[activeItem.index], newGame[overItem.index]] = [
-				newGame[overItem.index],
-				newGame[activeItem.index],
-			];
-		}
-
-		setPoolItems(newPool);
-		setGameItems(newGame);
-	};
-
-	return (
-		<Container>
-			<DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-				<Center>
-					<Stack align="stretch">
-						<Title my="md">Pool</Title>
-						<GridBoard
-							items={poolItems}
-							activeId={activeId}
-							isGameGrid={false}
-						/>
-						<Title my="md">Game</Title>
-						<GridBoard
-							items={gameItems}
-							activeId={activeId}
-							isGameGrid={true}
-						/>
-					</Stack>
-				</Center>
+		<Container size="xl">
+			<Stack align="center" justify="flex-start">
+			<link rel="stylesheet" href="rainbow.scss" />
+			<h1>Fog of Four</h1>
+			<p>Connect the groups of 3 to find the pivotal word</p>
+			<InputError>{errorMessage}</InputError>
+			{winData ? <WinMessage solution={solution} feedback={winData} /> : null}
+			<GameContext.Provider value={[gameState, setGameState, colorCycle]}>
+			<DndContext
+				collisionDetection={closestCenter}
+				autoScroll={false}
+				// onDragStart = {handleDragStart}
+				onDragOver = {handleDragOver}
+				onDragEnd={handleDragEnd}
+				sensors={useSensors(
+					useSensor(MouseSensor, {
+						activationConstraint: {
+							distance: 2,
+						  },
+					  
+					}),
+					useSensor(TouchSensor, {
+						activationConstraint: {
+							distance: 2,
+						  },
+						delayConstraint: 200,
+					  
+					}),
+					useSensor(KeyboardSensor)
+				)}
+				>
+				<SortableContext
+					items={itemIds}
+					strategy={rectSwappingStrategy}>
+					<GridBoard itemIds={itemIds} items={gameItems.current} />
+				</SortableContext>
+				<CheckButtons checkAnswers={handleSubmitAnswers} />
 			</DndContext>
+			</GameContext.Provider>
+			</Stack>
 		</Container>
+	);
+}
+
+export function WinMessage({solution, feedback: winData} : {solution: Solution, feedback: Feedback}) {
+	const colorsAndConnections = Object.keys(winData).map((color) => {
+		const feedbackProp = winData[color as keyof Feedback]
+		if(typeof feedbackProp === "string" && feedbackProp.includes("line") && Object.keys(solution).includes(feedbackProp)) {
+			return {color, connection: solution[feedbackProp as keyof Solution]};
+		}
+	}).filter((obj) => obj && obj.color !== undefined && obj.connection !== undefined) as unknown as {color: string, connection: string}[];
+
+	if (colorsAndConnections.length === 0) return null;
+	return (
+		<>
+		{colorsAndConnections.map(({color, connection}) => (<Blockquote color={color}>{connection}</Blockquote>))}
+		</>
 	);
 }
