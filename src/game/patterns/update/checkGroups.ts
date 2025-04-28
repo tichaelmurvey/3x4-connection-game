@@ -19,7 +19,9 @@ export function checkGroups(gameState: GameState): GameState {
 			if (!rainbowCell) continue;
 			if (rainbowCell.colorName !== groupCells[0].colorName) continue;
 			rainbowCell.locked = true;
-			rainbowCell.lockedGroup = groupId as LockableCategoryId;
+			rainbowCell.lockedGroup = 'rainbow';
+			rainbowCell.colorName = 'cRainbow';
+			gameState.groupStatus["rainbow"] = 'cRainbow';
 		}
 		gameState.groupStatus[groupId] = groupCells[0].colorName;
 		[groupCells[0], groupCells[1]].forEach((cell) => {

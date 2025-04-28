@@ -14,11 +14,13 @@ export function GridBoard({
 				cols={3}
 				style={{
 					justifyContent: "center",
-					alignItems: "stretch",
+					//alignItems: "stretch",
 					gap: 10,
-					maxWidth: "500px",
-					minWidth: "min(500px, 100%)",
-					gridTemplate: "repeat(3, 1fr) / repeat(3, 1fr)",
+					width: "min(500px, 100%)",
+					minWidth: "min(500px, 90%)",
+					height: "min(500px, 90vw)",
+					gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+					gridTemplateRows: "repeat(3, minmax(0, 1fr))",
 				}}>
 				{itemIds.map((id) => (
 					<SortableItem

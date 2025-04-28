@@ -1,117 +1,167 @@
-$purple: rgb(232 121 249);
-$blue: rgb(96 165 250);
-$green: rgb(94 234 212);
-$pink: #FFC1CF;
-$yellow: #E8FFB7;
+@use "sass:map";
+$borderSize: 10px;
 
-$cNeutral: #F2F2F2;
-$c1: #FFC1CF;
-$c2: #E879F9;
-$c3: #B7FFD8;
-$c4: #C4F5FC;
+$blue-light: #BEDEFC;
+$blue-dark: #A9C4FD;
+$green-light: #c3face;
+$green-dark: #A1E0AF;
+$pink-light: #FCDCE5;
+$pink-dark: #FFC1CF;
+$yellow-light: #FFDD99;
+$yellow-dark: #FFC145;
 
+$cNeutral: #EBEBEB;
+$c1: ("light": $blue-light, "dark": $blue-dark);
+$c2: ("light": $green-light, "dark": $green-dark);
+$c3: ("light": $pink-light, "dark": $pink-dark);
+$c4: ("light": $yellow-light, "dark": $yellow-dark);
 
-$animationtime: 45s;
-$length: 25;
+$backgroundsMap : (
+	cNeutral: $cNeutral,
+	c1: map.get($c1, "light"),
+	c2: map.get($c2, "light"),
+	c3: map.get($c3, "light"),
+	c4: map.get($c4, "light"),
+);
+
+$rainbowOptions : (
+	c1: map.get($c1, "light"),
+	c2: map.get($c2, "light"),
+	c3: map.get($c3, "light"),
+	c4: map.get($c4, "light"),
+);
+
+$borderShade: "dark";
+
+$bordersMap : (
+	c1: map.get($c1, $borderShade),
+	c2: map.get($c2, $borderShade),
+	c3: map.get($c3, $borderShade),	
+	c4: map.get($c4, $borderShade),
+);
 
 @mixin rainbowBorder($color) {
-	border: 10px dashed transparent;
+	border: $borderSize dashed transparent;
 	padding: 15px;
+	$colorType: "dark";
 	background: 
-		linear-gradient(to bottom right, $color 0%, $color 100%) padding-box center center no-repeat,
-	  linear-gradient(to bottom right, $purple 0%, $pink 25%, $yellow 50%, $green 75%, $blue 100%) border-box top left no-repeat;
+	  linear-gradient(to bottom right, $color 0%, $color 100%) padding-box center center no-repeat,
+	  linear-gradient(to bottom right, map.get($c1, $colorType) 0%, map.get($c2, $colorType) 25%, map.get($c3, $colorType) 50%, map.get($c4, $colorType) 75%, map.get($c1, $colorType) 100%) border-box top left no-repeat;
 	  border-radius: 20px;
 }
 
-.cRainbow {
-	@include rainbowBorder($cNeutral);
-}
-
-.cRainbowc1 {
-	@include rainbowBorder($c1);
-}
-.cRainbowc2 {
-	@include rainbowBorder($c2);
-}
-.cRainbowc3 {
-	@include rainbowBorder($c3);
-}
-.cRainbowc4 {
-	@include rainbowBorder($c4);
-}
-.cRainbowcNeutral {
-	@include rainbowBorder($cNeutral);
+.draggable {
+	border-radius: $borderSize;
+	background-color: $cNeutral;
+	border: $borderSize solid $cNeutral;
 }
 
 
+@each $name, $color in $bordersMap {
+  .#{$name} {
+	border: $borderSize dashed $color;
+  }
+}
 
-.cRainbow-locked{
-	text-shadow: 3px 3px 10px rgba(255,255,255,.8);
-	&:before, &:after {
-	  position: absolute;
-	  //border-radius: 10em;
-	  //transform: translateX(-50%) translateY(-50%);
-	  width: 100%;
-	  height: 100%;
-	  content: '';
-	  z-index: -1;
-	  background-size: 400% 400%;
-	  background: linear-gradient(50deg, #B7FFD8, #E8FFB7, #FFC1CF, #C4F5FC);
-	}
-	&:before {
-	  filter: blur(7px);
-	  transition: all .25s ease;
-	  animation: pulse 10s infinite ease;
-	}
-	&:after {
-	  filter: blur(0.3px);
-	}
+@each $name, $color in $backgroundsMap {
+  .locked-#{$name} {
+    background-color: $color;
+	//border: none;
+	border: $borderSize solid $color;
+  }
+}
+
+
+// .cRainbow {
+// 	@include rainbowBorder($cNeutral);
+// }
+
+// .cRainbowc1 {
+// 	@include rainbowBorder(map.get($c1, "light"));
+// }
+// .cRainbowc2 {
+// 	@include rainbowBorder(map.get($c2, "light"));
+// }
+// .cRainbowc3 {
+// 	@include rainbowBorder(map.get($c3, "light"));
+// }
+// .cRainbowc4 {
+// 	@include rainbowBorder(	map.get($c4, "light"));
+// }
+// .cRainbowcNeutral {
+// 	@include rainbowBorder($cNeutral);
+// }
+
+// .locked-cRainbow{
+// 	text-shadow: 3px 3px 10px rgba(255,255,255,.8);
+// 	background: none;
+// 	border: none;
+// 	&:before, &:after {
+// 	  position: absolute;
+// 	  border-radius: $borderSize;
+// 	  width: 100%;
+// 	  height: 100%;
+// 	  content: '';
+// 	  z-index: -1;
+// 	  background-size: 400% 400%;
+// 	  background: linear-gradient(50deg, #B7FFD8, #E8FFB7, #FFC1CF, #C4F5FC);
+// 	}
+// }
+
+$bg1: map.get($c1, "light");
+$bg2: map.get($c2, "light");
+$bg3: map.get($c3, "light");
+$bg4: map.get($c4, "light");
+
+
+@mixin gradient($keys...) {
+	background: linear-gradient(50deg, $keys...);
+	//border: none;
+  }  
+
+  .rainbow-with-c1 {
+	@include gradient($bg1);
+  }
+  .rainbow-with-c2 {
+	@include gradient($bg2);
+  }
+  .rainbow-with-c3 {
+	@include gradient($bg3);
+  }
+  .rainbow-with-c4 {
+	@include gradient($bg4);
+  }
   
-}
-@keyframes slide {
-	from {
-		right: -25vw;
-	}
-	to {
-		right: 125vw;
-	}
-}
-
-.h {
-	box-shadow: 0 0 50vh 40vh white;
-	width: 100vw;
-	height: 0;
-	bottom: 0;
-	left: 0;
-	position: absolute;
-}
-.v {
-	box-shadow: 0 0 35vw 25vw white;
-	width: 0;
-	height: 100vh;
-	bottom: 0;
-	left: 0;
-	position: absolute;
-}
-
-// DESCRIPTION (delete me if needed)
-.description-container {
-	position: absolute;
-	bottom: 32px;
-	left: 32px;
-	text-align: left;
-	letter-spacing: 3px;
-	.title {
-		font-size: 19px;
-		font-weight: 500;
-		color: black;
-		text-transform: uppercase;
-	}
-	.subtitle {
-		margin-top: 6px;
-		font-size: 26px;
-		font-weight: 500;
-		color: black;
-		text-transform: uppercase;
-	}
-}
+  .rainbow-with-c1.rainbow-with-c2 {
+	@include gradient($bg1, $bg2);
+  }
+  .rainbow-with-c1.rainbow-with-c3 {
+	@include gradient($bg1, $bg3);
+  }
+  .rainbow-with-c1.rainbow-with-c4 {
+	@include gradient($bg1, $bg4);
+  }
+  .rainbow-with-c2.rainbow-with-c3 {
+	@include gradient($bg2, $bg3);
+  }
+  .rainbow-with-c2.rainbow-with-c4 {
+	@include gradient($bg2, $bg4);
+  }
+  .rainbow-with-c3.rainbow-with-c4 {
+	@include gradient($bg3, $bg4);
+  }
+  .rainbow-with-c1.rainbow-with-c2.rainbow-with-c3 {
+	@include gradient($bg1, $bg2, $bg3);
+  }
+  .rainbow-with-c1.rainbow-with-c2.rainbow-with-c4 {
+	@include gradient($bg1, $bg2, $bg4);
+  }
+  .rainbow-with-c1.rainbow-with-c3.rainbow-with-c4 {
+	@include gradient($bg1, $bg3, $bg4);
+  }
+  .rainbow-with-c2.rainbow-with-c3.rainbow-with-c4 {
+	@include gradient($bg2, $bg3, $bg4);
+  }
+  .rainbow-with-c1.rainbow-with-c2.rainbow-with-c3.rainbow-with-c4 {
+	@include gradient($bg1, $bg2, $bg3, $bg4);
+  }

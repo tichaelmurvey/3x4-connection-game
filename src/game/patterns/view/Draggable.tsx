@@ -1,102 +1,62 @@
-import { viewConfig } from "@/game/patterns/model/config";
 import { Cell } from "@/game/patterns/model/model";
 import { GameContext } from "@/game/patterns/view/Game";
 import { rectSwappingStrategy, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { AspectRatio, Box, Center, Container, Text } from "@mantine/core";
+import { Center, Container, Text } from "@mantine/core";
 import React, { useContext } from "react";
 import useFitText from "use-fit-text";
 
 export function SortableItem({ id, cell }: { id: number; cell: Cell }) {
-	//console.log('rendering sortable item', id);
-	// const [bgColorIndex, setBgColorIndex] = useState<number | undefined>(
-	// 	undefined
-	// );
-	// const [myColor, setMyColor] = useState<keyof GameState["cellData"] | "grey">("grey");
 	const { fontSize, ref: fontSizeRef } = useFitText();
 	const [gameState, gameDispatch] = useContext(GameContext);
 	const style: React.CSSProperties = {
-		//minWidth: "12rem",
 		fontFamily: "sans-serif",
 		fontWeight: 700,
 		textTransform: "uppercase",
-		width: "100%",
 		height: "100%",
-		//borderRadius: "10px",
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "stretch",
-		justifyContent: "stretch",
-		overflow: "clip",
+		borderRadius: "10px",
 		position: "relative",
-		textShadow: '3px 3px 10px rgba(255,255,255,.8)',
+		textShadow: "3px 3px 10px rgba(255,255,255,.8)",
 	};
-	if(cell.colorName !== "cRainbow"){
-		style.backgroundColor = cell.locked ? viewConfig.colors[cell.colorName] : viewConfig.colors.cNeutral;
-		style.border = cell.locked ? "none" : `10px solid ${viewConfig.colors[cell.colorName]}`;
-	}
+
 	function handleClick() {
 		gameDispatch({ type: "CHANGE_COLOR", cellId: cell.id });
 	}
 
-	// useEffect (() => {
-	// 	const myNewColor = bgColorIndex !== undefined ? getKeyByValue(colors, colorCycle[bgColorIndex]) as keyof GameState: null;
-	// 	console.log("updating gamestate", bgColorIndex, myColor, myNewColor);
-	// 	if (!myColor) {
-	// 		console.log("returning early");
-	// 		return;
-	// 	}
-	// 	if (myNewColor === myColor || !myNewColor) {
-	// 		console.log("new color not found");
-	// 		return;
-	// 	}
-	// 	setGameState((prevState) => {
-	// 		const newGameState = {...prevState};
-	// 		if (myColor !== "grey") {
-	// 			newGameState[myColor] = newGameState[myColor].filter((gameItem) => gameItem.label !== item.label);
-	// 		}
-	// 		newGameState[myNewColor].push(item);
-	// 		return newGameState;
-	// 		})
-	// 	setMyColor(myNewColor);
+	const solvedColors = Object.values(gameState.groupStatus).filter((color) => color !== false && color !== "cRainbow");
+	const solvedColorsString = solvedColors.join(" rainbow-with-");
 
-	// }, [bgColorIndex]);
-	
 	return (
-		<AspectRatio ratio={1} key={cell.id}>
 			<ItemFrame cell={cell} id={id}>
-			<Box 
-			onClick={handleClick} 
-			style={style}
-			className={`${cell.colorName}${cell.lockedGroup === "rainbow" ? "-locked" : gameState.groupStatus[cell.lockedGroup] || ""}`}
-			>
-				<div />
 				<Center
-					style={{
-						flexGrow: 10,
-						textAlign: "center",
-						userSelect: "none",
-					}}>
+					onClick={handleClick}
+					style={style}
+					p="2px"
+					className={
+						`draggable ${
+							cell.colorName
+							} ${
+							cell.locked ? "locked-" : ""
+							}${
+							gameState.groupStatus[cell.lockedGroup] || ""
+							} rainbow-with-${
+								cell.lockedGroup === "rainbow" ? solvedColorsString : ""
+							}
+					`}>
 					<Text
 						key="label"
-						ref={fontSizeRef}
 						fw="700"
+						ref={fontSizeRef}
 						style={{
 							fontSize,
+							width: "100%",
 							userSelect: "none",
+							textAlign: "center",
 						}}>
 						{cell.label}
 					</Text>
 				</Center>
-				{/* <Group justify="center" gap="1px" h="12px" p="0">
-					{myColor !== "grey" &&
-						[...Array(colors.cycle.indexOf(myColor)).keys()].map((num) => (
-							<AccessibleColorDot key={`dot${num}`} />
-						))}
-				</Group> */}
-			</Box>
 			</ItemFrame>
-		</AspectRatio>
 	);
 }
 
@@ -109,26 +69,44 @@ function ItemFrame({
 	id: number;
 	children: React.ReactNode;
 }) {
-	const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-		useSortable({
-			id: id,
-			data: cell,
-			animateLayoutChanges: () => false,
-			strategy: rectSwappingStrategy,
-		});
-	const style : React.CSSProperties = {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: id,
+		data: cell,
+		animateLayoutChanges: () => false,
+		strategy: rectSwappingStrategy,
+	});
+	const style: React.CSSProperties = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		//minWidth: "8rem",
+		width: "100%",
 		height: "100%",
+		touchAction: "none",
 		position: "relative",
 	};
-	if(isDragging) {
+	if (isDragging) {
 		style.zIndex = 100;
 	} else {
 		style.zIndex = 0;
 	}
-	return <Container p={0} h="100%" fluid style={style} ref={setNodeRef} {...attributes} {...listeners}>{children}</Container>;
+	return (
+		<Container
+			p={0}
+			h="100%"
+			fluid
+			style={style}
+			ref={setNodeRef}
+			{...attributes}
+			{...listeners}>
+			{children}
+		</Container>
+	);
 }
 
 function AccessibleColorDot() {
@@ -146,6 +124,6 @@ function AccessibleColorDot() {
 	);
 }
 
-function getKeyByValue(object : Record<string, any>, value : string) {
-	return Object.keys(object).find(key => object[key] === value);
-  }
+function getKeyByValue(object: Record<string, any>, value: string) {
+	return Object.keys(object).find((key) => object[key] === value);
+}

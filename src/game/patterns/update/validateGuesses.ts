@@ -29,7 +29,7 @@ export function validateGuesses(gameState: GameState): GameState {
 		if (guesses === 3 && gameState.rainbowStatus) gameState.submitError =
 			`You can't submit a guess with 3 ${color} tiles, you've already solved the rainbow tile.`;
 
-		if (guesses === 3 && rainbowCell.locked) gameState.submitError =
+		if (guesses === 3 && rainbowCell.locked && rainbowCell.colorName !== color) gameState.submitError =
 			`You already have a set of three. One of them is the rainbow tile.`;
 
 		if (guesses === 3 && gameState.cells.filter((cell) => cell.colorName === "cRainbow").length === 1) gameState.submitError =

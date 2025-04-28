@@ -2,6 +2,7 @@ import { GameConfig } from "@/game/patterns/model/config";
 import { Cell, GameState, initialCell, LockableCategoryId, PuzzleSolution } from "@/game/patterns/model/model";
 import { changeColor } from "@/game/patterns/update/changeColor";
 import { checkGroups, checkRainbow } from "@/game/patterns/update/checkGroups";
+import { clearNonLockedCells } from "@/game/patterns/update/clearNonLockedCells";
 import { validateGuesses } from "@/game/patterns/update/validateGuesses";
 
 export type Action = InitAction | SubmitAction | ChangeColorAction | ClearCells;
@@ -128,20 +129,6 @@ function checkWrongGuesses(gameState: GameState) : GameState {
 		gameState.guessesRemaining--;
 	}
 	return gameState;
-}
-
-function clearNonLockedCells(gameState: GameState) : GameState {
-	console.log("checking non-locked cells");
-	const newGameState = structuredClone(gameState);
-	console.log(newGameState.cells);
-	newGameState.cells = newGameState.cells.map((cell) => {
-		if (cell.locked) return cell;
-		cell.colorName = "cNeutral";
-		return cell;
-	});
-	console.log(newGameState.cells);
-	newGameState.submitValid = true;
-	return newGameState;
 }
 
 export function isValidSubmit(gameState: GameState){

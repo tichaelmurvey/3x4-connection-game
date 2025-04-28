@@ -1,4 +1,3 @@
-import puzzles from "@/game/patterns/data/puzzles.json";
 import { gameConfig, viewConfig } from "@/game/patterns/model/config";
 import {
 	GameState,
@@ -6,17 +5,18 @@ import {
 	PuzzleSolution,
 } from "@/game/patterns/model/model";
 import { Action, gameUpdate } from "@/game/patterns/update/gameUpdate";
+import ChoosePuzzle from "@/game/patterns/view/ChoosePuzzle";
 import DragDrop from "@/game/patterns/view/DragDrop";
 import { DragEndEvent } from "@dnd-kit/core";
 import { arraySwap } from "@dnd-kit/sortable";
 import {
-	Blockquote,
 	Button,
-	Container,
 	Group,
 	InputError,
+	Paper,
 	Stack,
 	Text,
+	Title
 } from "@mantine/core";
 import { createContext, useReducer, useState } from "react";
 
@@ -48,104 +48,88 @@ export function Game() {
 		}
 	}
 
-	async function startGame() {
-		//timeout
-		await new Promise((resolve) => setTimeout(resolve, 500));
+	function startGame(puzzle: PuzzleSolution) {
 		gameDispatch({
 			type: "INIT",
-			puzzle: puzzles.puzzles[2] as PuzzleSolution,
+			puzzle,
 			initialGameState,
 			gameConfig,
 		});
 	}
-	// function handleSubmitAnswers() {
-	// 	const feedback = checkAnswers(gameState);
-	// 	console.log("feedback", feedback);
-	// 	if (feedback.status === "error") {
-	// 		setErrorMessage(feedback.errorMessage);
-	// 	}
-	// 	else {
-	// 		setErrorMessage(undefined);
-	// 	}
-	// 	if (feedback.status === "completed") {
-	// 		setWinData(feedback);
-	// 	} else {
-	// 		//lock all items which have been solved
-	// 		const newState = structuredClone(gameState);
-	// 		for (const color in newState.cellData) {
-	// 			if (!isActiveColor(color)) continue;
-	// 			if(feedback[color]) {
-	// 				newState.cellData[color].forEach((item) => item.locked = true);
-	// 				newState.openColors[color] = false;
-	// 			}
-	// 		}
-	// 		console.log("newState", newState);
-	// 		setGameState(newState);
-	// 	}
-	// }
 
 	return (
-		<Container size="xl">
-			<Stack align="center" justify="flex-start">
-				<link rel="stylesheet" href="rainbow.scss" />
-				<h1>One to Free Four</h1>
-				<p>Connect the groups of 3 to find the pivotal word</p>
+		<Stack align="center" justify="flex-start" gap="sm">
+			<link rel="stylesheet" href="rainbow.scss" />
+			<Title order={1}>One to Free Four</Title>
+			<Text>Connect the groups of 3 to find the pivotal word</Text>
+			{gameState.phase === "play" ||
+			gameState.phase === "won" ||
+			gameState.phase === "lost" ? (
+				<>
 				<InputError>{gameState.submitError}</InputError>
-				{gameState.won && gameState.puzzleSolution ? <WinMessage gameState={gameState} /> : null}
-				{gameState.phase === "play" ||
-				gameState.phase === "won" ||
-				gameState.phase === "lost" ? (
-					<>
-						<GameContext.Provider value={[gameState, gameDispatch]}>
-							<DragDrop
-								itemIds={itemIds}
-								handleDragEnd={handleDragEnd}
-							/>
-						</GameContext.Provider>
-						<GuessCounter
-							guesses={gameState.guessesRemaining}
-							maxGuesses={gameState.maxGuesses}
+			{gameState.won && gameState.puzzleSolution ? (
+				<WinMessage gameState={gameState} />
+			) : null}
+					<GameContext.Provider value={[gameState, gameDispatch]}>
+						<DragDrop
+							itemIds={itemIds}
+							handleDragEnd={handleDragEnd}
 						/>
-						<Group justify="center">
-							<Button
-								variant="outline"
-								onClick={() =>
-									gameDispatch({ type: "CLEAR_CELLS" })
-								}>
-								Deselect All
-							</Button>
+					</GameContext.Provider>
+					<GuessCounter
+						guesses={gameState.guessesRemaining}
+						maxGuesses={gameState.maxGuesses}
+					/>
+					<Group justify="center">
+						<Button
+							variant="outline"
+							onClick={() =>
+								gameDispatch({ type: "CLEAR_CELLS" })
+							}>
+							Deselect All
+						</Button>
 
-							<Button
-								disabled={!gameState.submitValid}
-								onClick={() =>
-									gameDispatch({ type: "SUBMIT" })
-								}>
-								Submit
-							</Button>
-						</Group>
-					</>
-				) : null}
-				{gameState.phase === "init" ? (
-					<Container size="xl">
-						<Button onClick={() => startGame()}>Start Game</Button>
-					</Container>
-				) : null}
-			</Stack>
-		</Container>
+						<Button
+							disabled={!gameState.submitValid}
+							onClick={() => gameDispatch({ type: "SUBMIT" })}>
+							Submit
+						</Button>
+					</Group>
+				</>
+			) : null}
+			{gameState.phase === "init" ? (
+				<Stack align="center" justify="center">
+					<ChoosePuzzle startGame={startGame} />
+					{/* <Button onClick={() => startGame()}>Start Game</Button> */}
+				</Stack>
+			) : null}
+		</Stack>
 	);
 }
 
-export function WinMessage({
-	gameState,
-}: {
-	gameState: GameState;
-}) {
+export function WinMessage({ gameState }: { gameState: GameState }) {
 	const connections = gameState.puzzleSolution!.connections;
-	return (<>{connections.map((connection, i) => (
-			<Blockquote key={i} color="grey" bg={viewConfig.colors[gameState.groupStatus[i] || "cNeutral"] }>{connection}</Blockquote>
-		))}
-		</>
-	)
+	const style: React.CSSProperties = {
+		width: "100%",
+	};
+	return (
+		<Group justify="stretch" align="stretch" gap="xs">
+			{connections.map((connection, i) => (
+				<Paper
+					key={i}
+					fw={500}
+					p="sm"
+					style={style}
+					bg={
+						viewConfig.colors[
+							gameState.groupStatus[i] || "cNeutral"
+						]
+					}>
+					{connection}
+				</Paper>
+			))}
+		</Group>
+	);
 }
 
 function GuessCounter({
@@ -165,7 +149,7 @@ function GuessCounter({
 	}
 	return (
 		<Group justify="center">
-			<Text>Guesses: {guessBulbs}</Text>
+			<Text fz="lg">Guesses: {guessBulbs}</Text>
 		</Group>
 	);
 }

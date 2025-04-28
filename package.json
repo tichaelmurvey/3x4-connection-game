@@ -6,8 +6,12 @@
   "scripts": {
     "sass": "sass --watch src/rainbow.scss src/rainbow.css",
     "start": "concurrently --kill-others \"npm run sass\" \"npx parcel\"",
-    "build": "parcel build"
+    "build": "parcel build",
+    "upload": " node ./src/game/patterns/data/upload.js"
   },
+  "alias": {
+    "process": false
+ },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/modifiers": "^9.0.0",
@@ -19,6 +23,8 @@
     "@types/css-modules": "^1.0.5",
     "@types/react-dnd": "^2.0.36",
     "autoprefixer": "^10.4.21",
+    "firebase": "^11.6.1",
+    "firebase-admin": "^13.3.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-sortablejs": "^6.1.4",
@@ -32,6 +38,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/sortablejs": "^1.15.8",
+    "buffer": "^6.0.3",
     "concurrently": "^9.1.2",
     "parcel": "^2.14.0",
     "postcss": "^8.5.3",
