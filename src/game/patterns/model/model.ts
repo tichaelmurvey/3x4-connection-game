@@ -29,9 +29,10 @@ export type PuzzleSolution = {
 	connections: string[];
 }
 
+export type Phase = "init" | "play" | "won" | "lost" | "loading";
 
 export type GameState = {
-	phase: "init" | "play" | "won" | "lost" | "loading";
+	phase: Phase;
 	puzzleId: number;
 	cells: Cell[];
 	guessesRemaining: number;

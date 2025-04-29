@@ -2,6 +2,7 @@ import { gameConfig } from "@/game/patterns/model/config";
 import {
 	GameState,
 	initialGameState,
+	Phase,
 	PuzzleSolution,
 } from "@/game/patterns/model/model";
 import { Action, gameUpdate } from "@/game/patterns/update/gameUpdate";
@@ -19,7 +20,17 @@ import {
 	Text,
 	Title,
 } from "@mantine/core";
-import { createContext, useContext, useReducer, useState } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { useCookies } from 'react-cookie';
+
+export type GameMetadata = {
+	status: Phase;
+}
+export type GamesWonOrLost = Record<number, GameMetadata>;
+
+export type CookieData = {
+	gamesData: GamesWonOrLost;
+}
 
 export const GameContext = createContext<
 	[GameState, React.ActionDispatch<[action: Action]>]
@@ -27,6 +38,7 @@ export const GameContext = createContext<
 
 export function Game() {
 	const [gameState, gameDispatch] = useReducer(gameUpdate, initialGameState);
+	const [cookies, setCookie] = useCookies<'gamesData', CookieData>();
 
 	const [itemIds, setItemIds] = useState<number[]>(
 		Array.from({ length: 9 }, (_, i) => i)
@@ -50,6 +62,8 @@ export function Game() {
 	}
 
 	function startGame(puzzle: PuzzleSolution) {
+		const newCookieData = {...cookies.gamesData, [puzzle.id]: {status: 'play'}};
+		setCookie('gamesData',newCookieData);
 		gameDispatch({
 			type: "INIT",
 			puzzle,
@@ -57,6 +71,17 @@ export function Game() {
 			gameConfig,
 		});
 	}
+	// useEffect(() => {
+	// 	setCookie('gamesData',{});
+	// }, []);
+
+	useEffect(() => {
+		console.log("updating gamestate cookies", gameState, cookies.gamesData);
+		if (gameState.puzzleSolution && gameState.phase !== cookies.gamesData[gameState.puzzleSolution.id]?.status) {
+			const newCookieData = {...cookies.gamesData, [gameState.puzzleSolution.id]: {status: gameState.phase}};
+			setCookie('gamesData',newCookieData);
+		}
+	}, [gameState, cookies]);
 
 	return (
 		<Center>
@@ -109,7 +134,6 @@ export function Game() {
 				{gameState.phase === "init" ? (
 					<Stack align="center" justify="center">
 						<ChoosePuzzle startGame={startGame} />
-						{/* <Button onClick={() => startGame()}>Start Game</Button> */}
 					</Stack>
 				) : null}
 			</Stack>

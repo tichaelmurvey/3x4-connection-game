@@ -68,6 +68,10 @@
   border: none;
 }
 
+.puzzle-card:focus-visible {
+  outline: 2px solid black;
+}
+
 .rainbow-with-c1.rainbow-with-c2 {
   background: conic-gradient(#c3face 0deg, #BEDEFC, #c3face);
 }

@@ -81,6 +81,10 @@ $bordersMap : (
 }
 }
 
+.puzzle-card:focus-visible {
+		outline: 2px solid black;
+	}
+
 
 $bg1: map.get($c1, "light");
 $bg2: map.get($c2, "light");
