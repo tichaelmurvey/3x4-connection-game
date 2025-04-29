@@ -1,4 +1,4 @@
-import { gameConfig, viewConfig } from "@/game/patterns/model/config";
+import { gameConfig } from "@/game/patterns/model/config";
 import {
 	GameState,
 	initialGameState,
@@ -11,14 +11,15 @@ import { DragEndEvent } from "@dnd-kit/core";
 import { arraySwap } from "@dnd-kit/sortable";
 import {
 	Button,
+	Center,
 	Group,
 	InputError,
 	Paper,
 	Stack,
 	Text,
-	Title
+	Title,
 } from "@mantine/core";
-import { createContext, useReducer, useState } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
 
 export const GameContext = createContext<
 	[GameState, React.ActionDispatch<[action: Action]>]
@@ -58,52 +59,61 @@ export function Game() {
 	}
 
 	return (
-		<Stack align="center" justify="flex-start" gap="sm">
-			<link rel="stylesheet" href="rainbow.scss" />
-			<Title order={1}>One to Free Four</Title>
-			<Text>Connect the groups of 3 to find the pivotal word</Text>
-			{gameState.phase === "play" ||
-			gameState.phase === "won" ||
-			gameState.phase === "lost" ? (
-				<>
-				<InputError>{gameState.submitError}</InputError>
-			{gameState.won && gameState.puzzleSolution ? (
-				<WinMessage gameState={gameState} />
-			) : null}
-					<GameContext.Provider value={[gameState, gameDispatch]}>
-						<DragDrop
-							itemIds={itemIds}
-							handleDragEnd={handleDragEnd}
+		<Center>
+			<Stack
+				align="center"
+				justify="flex-start"
+				gap="sm"
+				w="min(500px, 100%)">
+				<link rel="stylesheet" href="rainbow.scss" />
+				<Title order={1}>One to Free Four</Title>
+				<Text>Connect the groups of 3 to find the pivotal word</Text>
+				{gameState.phase === "play" ||
+				gameState.phase === "won" ||
+				gameState.phase === "lost" ? (
+					<>
+						<GameContext.Provider value={[gameState, gameDispatch]}>
+						<InputError>{gameState.submitError}</InputError>
+						{gameState.over && gameState.puzzleSolution ? (
+							<WinMessage gameState={gameState} />
+						) : null}
+						{ gameState.phase === "lost" ? <YouLost /> : null}
+							<DragDrop
+								itemIds={itemIds}
+								handleDragEnd={handleDragEnd}
+							/>
+						</GameContext.Provider>
+						<GuessCounter
+							guesses={gameState.guessesRemaining}
+							maxGuesses={gameState.maxGuesses}
 						/>
-					</GameContext.Provider>
-					<GuessCounter
-						guesses={gameState.guessesRemaining}
-						maxGuesses={gameState.maxGuesses}
-					/>
-					<Group justify="center">
-						<Button
-							variant="outline"
-							onClick={() =>
-								gameDispatch({ type: "CLEAR_CELLS" })
-							}>
-							Deselect All
-						</Button>
+						<Group justify="center">
+							<Button
+								variant="outline"
+								onClick={() =>
+									gameDispatch({ type: "CLEAR_CELLS" })
+								}>
+								Deselect All
+							</Button>
 
-						<Button
-							disabled={!gameState.submitValid}
-							onClick={() => gameDispatch({ type: "SUBMIT" })}>
-							Submit
-						</Button>
-					</Group>
-				</>
-			) : null}
-			{gameState.phase === "init" ? (
-				<Stack align="center" justify="center">
-					<ChoosePuzzle startGame={startGame} />
-					{/* <Button onClick={() => startGame()}>Start Game</Button> */}
-				</Stack>
-			) : null}
-		</Stack>
+							<Button
+								disabled={!gameState.submitValid}
+								onClick={() =>
+									gameDispatch({ type: "SUBMIT" })
+								}>
+								Submit
+							</Button>
+						</Group>
+					</>
+				) : null}
+				{gameState.phase === "init" ? (
+					<Stack align="center" justify="center">
+						<ChoosePuzzle startGame={startGame} />
+						{/* <Button onClick={() => startGame()}>Start Game</Button> */}
+					</Stack>
+				) : null}
+			</Stack>
+		</Center>
 	);
 }
 
@@ -113,18 +123,14 @@ export function WinMessage({ gameState }: { gameState: GameState }) {
 		width: "100%",
 	};
 	return (
-		<Group justify="stretch" align="stretch" gap="xs">
+		<Group align="stretch" gap="xs">
 			{connections.map((connection, i) => (
 				<Paper
 					key={i}
 					fw={500}
 					p="sm"
-					style={style}
-					bg={
-						viewConfig.colors[
-							gameState.groupStatus[i] || "cNeutral"
-						]
-					}>
+					className = {`answer ${gameState.groupStatus[i]  || "cNeutral"}`}
+					>
 					{connection}
 				</Paper>
 			))}
@@ -151,5 +157,16 @@ function GuessCounter({
 		<Group justify="center">
 			<Text fz="lg">Guesses: {guessBulbs}</Text>
 		</Group>
+	);
+}
+
+
+function YouLost() {
+	const [gameState, gameDispatch] = useContext(GameContext);
+	return (
+		<Stack align="center" justify="center">
+			<Text fz="lg"><a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/watch?v=Lzeqbws7FiE">Better luck next time...</a></Text>
+			<Button onClick={() => gameDispatch({ type: "EXIT" })}>Try another puzzle</Button>
+		</Stack>
 	);
 }

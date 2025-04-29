@@ -5,11 +5,11 @@ export function clearNonLockedCells(gameState: GameState): GameState {
 	const newGameState = structuredClone(gameState);
 	console.log(newGameState.cells);
 	newGameState.cells = newGameState.cells.map((cell) => {
-		if(cell.locked && cell.colorName==="cRainbow" && cell.lockedGroup !== "rainbow"){
-			cell.colorName = gameState.groupStatus[cell.lockedGroup] || "cNeutral";
-			return cell;
-		}
-		if (cell.locked) return cell;
+		// if(cell.locked && cell.colorName==="cRainbow" && cell.lockedGroup !== "rainbow"){
+		// 	cell.colorName = cell.lockedGroup ? gameState.groupStatus[cell.lockedGroup] || "cNeutral" : "cNeutral";
+		// 	return cell;
+		// }
+		// if (cell.locked) return cell;
 		cell.colorName = "cNeutral";
 		return cell;
 	});

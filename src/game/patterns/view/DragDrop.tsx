@@ -1,6 +1,6 @@
 import { GameContext } from "@/game/patterns/view/Game";
 import { GridBoard } from "@/game/patterns/view/GridBoard";
-import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, rectSwappingStrategy } from "@dnd-kit/sortable";
 import { useContext } from "react";
 
@@ -29,7 +29,7 @@ export default function DragDrop({
 					},
 					delayConstraint: 200,
 				}),
-				useSensor(KeyboardSensor)
+				//useSensor(KeyboardSensor)
 			)}>
 			<SortableContext items={itemIds} strategy={rectSwappingStrategy}>
 				<GridBoard itemIds={itemIds} cells={gameState.cells} />

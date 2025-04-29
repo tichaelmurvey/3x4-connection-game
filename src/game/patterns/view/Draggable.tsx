@@ -14,6 +14,7 @@ export function SortableItem({ id, cell }: { id: number; cell: Cell }) {
 		fontWeight: 700,
 		textTransform: "uppercase",
 		height: "100%",
+		width: "100%",
 		borderRadius: "10px",
 		position: "relative",
 		textShadow: "3px 3px 10px rgba(255,255,255,.8)",
@@ -25,10 +26,11 @@ export function SortableItem({ id, cell }: { id: number; cell: Cell }) {
 
 	const solvedColors = Object.values(gameState.groupStatus).filter((color) => color !== false && color !== "cRainbow");
 	const solvedColorsString = solvedColors.join(" rainbow-with-");
-
+	//console.log("colordata", cell.label, cell.colorName, cell.locked, cell.lockedGroup, gameState.groupStatus?[cell.lockedGroup] : "", cell.lockedGroup === "rainbow", solvedColorsString);
 	return (
 			<ItemFrame cell={cell} id={id}>
 				<Center
+					component="button"
 					onClick={handleClick}
 					style={style}
 					p="2px"
@@ -38,7 +40,7 @@ export function SortableItem({ id, cell }: { id: number; cell: Cell }) {
 							} ${
 							cell.locked ? "locked-" : ""
 							}${
-							gameState.groupStatus[cell.lockedGroup] || ""
+							cell.lockedGroup !== null ? gameState.groupStatus[cell.lockedGroup] : ""
 							} rainbow-with-${
 								cell.lockedGroup === "rainbow" ? solvedColorsString : ""
 							}
@@ -103,7 +105,9 @@ function ItemFrame({
 			style={style}
 			ref={setNodeRef}
 			{...attributes}
-			{...listeners}>
+			{...listeners}
+			tabIndex={-1}
+			>
 			{children}
 		</Container>
 	);

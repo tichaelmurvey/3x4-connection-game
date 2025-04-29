@@ -53,9 +53,12 @@ $bordersMap : (
 .draggable {
 	border-radius: $borderSize;
 	background-color: $cNeutral;
-	border: $borderSize solid $cNeutral;
+	//border: $borderSize solid $cNeutral;
 }
 
+.draggable {
+	border: none;
+}
 
 @each $name, $color in $bordersMap {
   .#{$name} {
@@ -64,49 +67,20 @@ $bordersMap : (
 }
 
 @each $name, $color in $backgroundsMap {
-  .locked-#{$name} {
+  .locked-#{$name}, .locked-cRainbow.rainbow-with-#{$name} {
     background-color: $color;
+	// &.cNeutral{
+	// 	border: $borderSize solid $color;
+	// }
 	//border: none;
-	border: $borderSize solid $color;
+	//border: $borderSize solid $color;
   }
+  .answer.#{$name} {
+	background-color: $color;
+	border: none;
+}
 }
 
-
-// .cRainbow {
-// 	@include rainbowBorder($cNeutral);
-// }
-
-// .cRainbowc1 {
-// 	@include rainbowBorder(map.get($c1, "light"));
-// }
-// .cRainbowc2 {
-// 	@include rainbowBorder(map.get($c2, "light"));
-// }
-// .cRainbowc3 {
-// 	@include rainbowBorder(map.get($c3, "light"));
-// }
-// .cRainbowc4 {
-// 	@include rainbowBorder(	map.get($c4, "light"));
-// }
-// .cRainbowcNeutral {
-// 	@include rainbowBorder($cNeutral);
-// }
-
-// .locked-cRainbow{
-// 	text-shadow: 3px 3px 10px rgba(255,255,255,.8);
-// 	background: none;
-// 	border: none;
-// 	&:before, &:after {
-// 	  position: absolute;
-// 	  border-radius: $borderSize;
-// 	  width: 100%;
-// 	  height: 100%;
-// 	  content: '';
-// 	  z-index: -1;
-// 	  background-size: 400% 400%;
-// 	  background: linear-gradient(50deg, #B7FFD8, #E8FFB7, #FFC1CF, #C4F5FC);
-// 	}
-// }
 
 $bg1: map.get($c1, "light");
 $bg2: map.get($c2, "light");
@@ -115,22 +89,24 @@ $bg4: map.get($c4, "light");
 
 
 @mixin gradient($keys...) {
-	background: linear-gradient(50deg, $keys...);
-	//border: none;
+	background: conic-gradient(
+		$keys...,
+		nth($keys, -1) 0deg,
+		);
   }  
 
-  .rainbow-with-c1 {
-	@include gradient($bg1);
-  }
-  .rainbow-with-c2 {
-	@include gradient($bg2);
-  }
-  .rainbow-with-c3 {
-	@include gradient($bg3);
-  }
-  .rainbow-with-c4 {
-	@include gradient($bg4);
-  }
+//   .rainbow-with-c1 {
+// 	@include gradient($bg1);
+//   }
+//   .rainbow-with-c2 {
+// 	@include gradient($bg2);
+//   }
+//   .rainbow-with-c3 {
+// 	@include gradient($bg3);
+//   }
+//   .rainbow-with-c4 {
+// 	@include gradient($bg4);
+//   }
   
   .rainbow-with-c1.rainbow-with-c2 {
 	@include gradient($bg1, $bg2);

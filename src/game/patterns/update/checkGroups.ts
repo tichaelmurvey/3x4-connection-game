@@ -2,13 +2,11 @@ import { GameState, LockableCategoryId } from "@/game/patterns/model/model";
 
 export function checkGroups(gameState: GameState): GameState {
 	for (let groupId = 0; groupId < gameState.puzzleSolution!.groups.length; groupId++) {
-		console.log("checking group", groupId, gameState.puzzleSolution!.groups[groupId]);
 		//Check if group has been solved
 		if (gameState.groupStatus[groupId]) continue;
 
 		//find cells in group
 		const groupCells = gameState.cells.filter((cell) => cell.groupId === groupId);
-		console.log("group cells", groupCells);
 
 		//check if they match colour
 		if (groupCells[0].colorName === "cNeutral" || groupCells[0].colorName !== groupCells[1].colorName) continue;
@@ -30,8 +28,8 @@ export function checkGroups(gameState: GameState): GameState {
 		});
 	}
 	//check if all groups have been solved
-	gameState.won = Object.keys(gameState.groupStatus).every((groupId) => gameState.groupStatus[groupId as LockableCategoryId]);
-	if (gameState.won) {
+	gameState.over = Object.keys(gameState.groupStatus).every((groupId) => gameState.groupStatus[groupId as LockableCategoryId]);
+	if (gameState.over) {
 		gameState.phase = "won";
 		return gameState;
 	}
@@ -39,6 +37,8 @@ export function checkGroups(gameState: GameState): GameState {
 	//remove solved groups from colours without group
 	const solvedColors = Object.values(gameState.groupStatus).filter((color) => color !== false);
 	gameState.colorCycle = gameState.colorCycle.filter((color) => !solvedColors.includes(color));
+	//add next color to cycle
+	gameState = updateActiveColor(gameState);
 	return gameState;
 }
 
@@ -58,6 +58,15 @@ export function checkRainbow(gameState: GameState) {
 		rainbowCell.lockedGroup = "rainbow";
 		gameState.groupStatus["rainbow"] = rainbowCell.colorName;
 	}
+	return gameState;
+}
+
+export function updateActiveColor(gameState: GameState): GameState {
+	if (gameState.colorCycle.length === 1) {
+		console.log("updating active color", gameState.colorCycle, gameState.multiGroupColors);
+		gameState.colorCycle = gameState.colorCycle.concat(gameState.multiGroupColors.splice(0, 1));
+	}
+	console.log("updated active color", gameState.colorCycle);
 	return gameState;
 }
 

@@ -1,7 +1,10 @@
 .draggable {
   border-radius: 10px;
   background-color: #EBEBEB;
-  border: 10px solid #EBEBEB;
+}
+
+.draggable {
+  border: none;
 }
 
 .c1 {
@@ -20,89 +23,93 @@
   border: 10px dashed #FFC145;
 }
 
-.locked-cNeutral {
+.locked-cNeutral, .locked-cRainbow.rainbow-with-cNeutral {
   background-color: #EBEBEB;
-  border: 10px solid #EBEBEB;
 }
 
-.locked-c1 {
+.answer.cNeutral {
+  background-color: #EBEBEB;
+  border: none;
+}
+
+.locked-c1, .locked-cRainbow.rainbow-with-c1 {
   background-color: #BEDEFC;
-  border: 10px solid #BEDEFC;
 }
 
-.locked-c2 {
+.answer.c1 {
+  background-color: #BEDEFC;
+  border: none;
+}
+
+.locked-c2, .locked-cRainbow.rainbow-with-c2 {
   background-color: #c3face;
-  border: 10px solid #c3face;
 }
 
-.locked-c3 {
+.answer.c2 {
+  background-color: #c3face;
+  border: none;
+}
+
+.locked-c3, .locked-cRainbow.rainbow-with-c3 {
   background-color: #FCDCE5;
-  border: 10px solid #FCDCE5;
 }
 
-.locked-c4 {
+.answer.c3 {
+  background-color: #FCDCE5;
+  border: none;
+}
+
+.locked-c4, .locked-cRainbow.rainbow-with-c4 {
   background-color: #FFDD99;
-  border: 10px solid #FFDD99;
 }
 
-.rainbow-with-c1 {
-  background: linear-gradient(50deg, #BEDEFC);
-}
-
-.rainbow-with-c2 {
-  background: linear-gradient(50deg, #c3face);
-}
-
-.rainbow-with-c3 {
-  background: linear-gradient(50deg, #FCDCE5);
-}
-
-.rainbow-with-c4 {
-  background: linear-gradient(50deg, #FFDD99);
+.answer.c4 {
+  background-color: #FFDD99;
+  border: none;
 }
 
 .rainbow-with-c1.rainbow-with-c2 {
-  background: linear-gradient(50deg, #BEDEFC, #c3face);
+  background: conic-gradient(#c3face 0deg, #BEDEFC, #c3face);
 }
 
 .rainbow-with-c1.rainbow-with-c3 {
-  background: linear-gradient(50deg, #BEDEFC, #FCDCE5);
+  background: conic-gradient(#FCDCE5 0deg, #BEDEFC, #FCDCE5);
 }
 
 .rainbow-with-c1.rainbow-with-c4 {
-  background: linear-gradient(50deg, #BEDEFC, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #BEDEFC, #FFDD99);
 }
 
 .rainbow-with-c2.rainbow-with-c3 {
-  background: linear-gradient(50deg, #c3face, #FCDCE5);
+  background: conic-gradient(#FCDCE5 0deg, #c3face, #FCDCE5);
 }
 
 .rainbow-with-c2.rainbow-with-c4 {
-  background: linear-gradient(50deg, #c3face, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #c3face, #FFDD99);
 }
 
 .rainbow-with-c3.rainbow-with-c4 {
-  background: linear-gradient(50deg, #FCDCE5, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #FCDCE5, #FFDD99);
 }
 
 .rainbow-with-c1.rainbow-with-c2.rainbow-with-c3 {
-  background: linear-gradient(50deg, #BEDEFC, #c3face, #FCDCE5);
+  background: conic-gradient(#FCDCE5 0deg, #BEDEFC, #c3face, #FCDCE5);
 }
 
 .rainbow-with-c1.rainbow-with-c2.rainbow-with-c4 {
-  background: linear-gradient(50deg, #BEDEFC, #c3face, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #BEDEFC, #c3face, #FFDD99);
 }
 
 .rainbow-with-c1.rainbow-with-c3.rainbow-with-c4 {
-  background: linear-gradient(50deg, #BEDEFC, #FCDCE5, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #BEDEFC, #FCDCE5, #FFDD99);
 }
 
 .rainbow-with-c2.rainbow-with-c3.rainbow-with-c4 {
-  background: linear-gradient(50deg, #c3face, #FCDCE5, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #c3face, #FCDCE5, #FFDD99);
 }
 
 .rainbow-with-c1.rainbow-with-c2.rainbow-with-c3.rainbow-with-c4 {
-  background: linear-gradient(50deg, #BEDEFC, #c3face, #FCDCE5, #FFDD99);
+  background: conic-gradient(#FFDD99 0deg, #BEDEFC, #c3face, #FCDCE5, #FFDD99);
 }
 
 /*# sourceMappingURL=rainbow.css.map */

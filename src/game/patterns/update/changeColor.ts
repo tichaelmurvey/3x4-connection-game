@@ -13,26 +13,12 @@ export function changeColor(gameState: GameState, action: ChangeColorAction): Ga
 	const cell = newGameState.cells[action.cellId];
 
 	if (cell.locked) {
-		const lockedCellGroupColor = newGameState.groupStatus[cell.lockedGroup];
+		const lockedCellGroupColor = newGameState.groupStatus[cell.lockedGroup!];
 
 		if (lockedCellGroupColor === false) {
 			throw new Error("Cell is locked but group color could not be found");
 		}
-
-		// if (newGameState.rainbowStatus) {
-		// 	console.log("can't change color");
-		// 	return newGameState;
-		// }
-
-		// else if (cell.lockedGroup !== "rainbow" && cell.colorName === "cRainbow") {
-		// 	cell.colorName = lockedCellGroupColor;
-		// }
-
-		// else if (cell.lockedGroup !== "rainbow" && cell.colorName === lockedCellGroupColor) {
-		// 	cell.colorName = "cRainbow";
-		// }
-		//return newGameState;
-	}	
+	}
 	
 	//if not locked, find next valid color
 	const currentColor = cell.colorName;

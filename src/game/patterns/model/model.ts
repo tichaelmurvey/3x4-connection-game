@@ -15,7 +15,7 @@ export type Cell = {
 	groupId: LockableCategoryId;
 	label: string;
 	locked: boolean;
-	lockedGroup: LockableCategoryId;
+	lockedGroup: LockableCategoryId | null;
 }
 
 export type GroupId = 0 | 1 | 2 | 3 ;
@@ -36,7 +36,7 @@ export type GameState = {
 	cells: Cell[];
 	guessesRemaining: number;
 	maxGuesses: number;
-	won: boolean;
+	over: boolean;
 	multiGroupColors: ColorIndex[];
 	colorCycle: ColorIndex[];
 	rainbowStatus: boolean;
@@ -55,10 +55,10 @@ export const initialGameState: GameState = {
 	cells: [],
 	guessesRemaining: gameConfig.maxGuesses,
 	maxGuesses: gameConfig.maxGuesses,
-	won: false,
+	over: false,
 	rainbowStatus: false,
 	multiGroupColors: ["c1", "c2", "c3", "c4"],
-	colorCycle: ["cNeutral", "c1", "c2", "c3", "c4", "cRainbow"],
+	colorCycle: ["cNeutral"],
 	groupStatus: {
 		rainbow: false,
 		0: false,
@@ -79,5 +79,5 @@ export const initialCell: Cell = {
 	label: "",
 	groupId: 0,
 	locked: false,
-	lockedGroup: 0,
+	lockedGroup: null,
 }

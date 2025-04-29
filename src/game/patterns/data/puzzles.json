@@ -4,14 +4,14 @@
 			"id": 1,
 			"rainbow": "Rainbow",
 			"groups": [
-				["Jolly Rodger", "Gadsden"],
+				["Jolly Roger", "White"],
 				["Week", "Major scale"],
 				["Witch", "Oz"],
 				["Snowblade", "Windshield"]
 			],
 			"connections": [
 				"Famous non-country flags",
-				"Groups of seven",
+				"Sequences of seven",
 				"Wizard of Oz song topics",
 				"Weather + medieval armament"
 			]
@@ -20,15 +20,15 @@
 			"id": 2,
 			"rainbow": "Till",
 			"groups": [
-				["Sow", "Plant"],
-				["Before", "Yet"],
-				["Kitty", "Safe"],
+				["Water", "Pick"],
+				["Ago", "By"],
+				["Register", "Safe"],
 				["Bens", "Er"]
 			],
 			"connections": [
-				"Agricultural actions",
-				"Time-based prepositions",
-				"Places for cash",
+				"Agricultural tasks",
+				"Temporal prepositions",
+				"Place to store cash",
 				"Ben Stiller"
 			]
 		},
@@ -37,16 +37,97 @@
 			"rainbow": "Go",
 			"groups": [
 				["Chance", "Jail"],
-				["Turn", "Move"],
-				["Leave", "Bail"],
-				["X", "Mystery dungeon: explorers of darkness"]
+				["Risk", "Clue"],
+				["Exit", "Bail"],
+				["X", "Scarlet"]
 			],
 			"connections": [
 				"Monopoly squares",
-				"Your ___, in a board game",
-				"Abscond",
+				"Classic board games",
+				"Leave",
 				"Pokemon games"
 			]
+		},
+		{
+			"id": 4,
+			"rainbow": "360",
+			"groups": [
+				["One", "Series X"],
+				["Boys", "365"],
+				["180", "Ollie"],
+				["2π", "1"]
+			],
+			"connections": [
+				"Xbox models",
+				"Charlie XCX songs",
+				"Skateboard tricks",
+				"Circle, in different units"
+			]
+		},
+		{
+			"id": 5,
+			"rainbow": "Penguin",
+			"groups": [
+				["Joker", "Poison Ivy"],
+				["Mime", "Magpie"],
+				["Bill Nye", "Young Sheldon"],
+				["Mr Wormwood", "The Lorax"]
+			],
+			"connections": [
+				"Batman villains",
+				"Black and white",
+				"Famous bow-tie wearers",
+				"Danny DeVito roles"
+			]
+		},
+		{
+			"id": 6,
+			"rainbow": "Penguin",
+			"groups": [
+				["Scrooge McDuck", "Fester"],
+				["App", "Nok"],
+				["Cat", "Blue Fish"],
+				["Jeeves", "Smithers"]
+			],
+			"connections": [
+				"Uncles",
+				"First part of smartphone brands",
+				"Dr Seuss Characters",
+				"Fictional manservants"
+			]
+		},
+		{
+			"id": 7,
+			"rainbow": "Grass",
+			"groups": [
+				["Tide Pod", "Silica"],
+				["Acid", "Molly"],
+				["Knife", "Wesley Snipes"],
+				["Up", "Down"]
+			],
+			"connections": [
+				"Don't eat it!",
+				"Slang for drugs",
+				"Can be called 'blade'",
+				"Touch ___"
+			]
+		},
+		{
+			"id": 8,
+			"rainbow": "Galileo",
+			"groups": [
+				["Jordan", "Bethany"],
+				["Beelzebub", "Mama"],
+				["Halley", "Eratosthenes"],
+				["Smeagol", "Brunhild"]
+			],
+			"connections": [
+				"Names from biblical locations",
+				"Bohemian Rhapsody characters",
+				"Astronmers",
+				"Discovered rings"
+			]
+
 		}
 		
 	]
