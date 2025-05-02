@@ -1,17 +1,15 @@
-import { GameContext } from "@/game/patterns/view/Game";
-import { GridBoard } from "@/game/patterns/view/GridBoard";
+import { GridBoard } from "@/game/view/puzzle/GridBoard";
 import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, rectSwappingStrategy } from "@dnd-kit/sortable";
-import { useContext } from "react";
+import { memo } from "react";
 
-export default function DragDrop({
+export const DragDrop = memo(function DragDrop({
 	itemIds,
 	handleDragEnd,
 }: {
 	itemIds: number[];
 	handleDragEnd: (event: any) => void;
 }) {
-	const [gameState, gameDispatch] = useContext(GameContext);
 	return (
 		<DndContext
 			collisionDetection={closestCenter}
@@ -32,9 +30,9 @@ export default function DragDrop({
 				//useSensor(KeyboardSensor)
 			)}>
 			<SortableContext items={itemIds} strategy={rectSwappingStrategy}>
-				<GridBoard itemIds={itemIds} cells={gameState.cells} />
+				<GridBoard itemIds={itemIds} />
 			</SortableContext>
 			
 		</DndContext>
 	);
-}
+});

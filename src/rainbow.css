@@ -23,7 +23,7 @@
   border: 10px dashed #FFC145;
 }
 
-.locked-cNeutral, .locked-cRainbow.rainbow-with-cNeutral {
+.locked-cNeutral, .rainbow-with-cNeutral {
   background-color: #EBEBEB;
 }
 
@@ -32,7 +32,7 @@
   border: none;
 }
 
-.locked-c1, .locked-cRainbow.rainbow-with-c1 {
+.locked-c1, .rainbow-with-c1 {
   background-color: #BEDEFC;
 }
 
@@ -41,7 +41,7 @@
   border: none;
 }
 
-.locked-c2, .locked-cRainbow.rainbow-with-c2 {
+.locked-c2, .rainbow-with-c2 {
   background-color: #c3face;
 }
 
@@ -50,7 +50,7 @@
   border: none;
 }
 
-.locked-c3, .locked-cRainbow.rainbow-with-c3 {
+.locked-c3, .rainbow-with-c3 {
   background-color: #FCDCE5;
 }
 
@@ -59,7 +59,7 @@
   border: none;
 }
 
-.locked-c4, .locked-cRainbow.rainbow-with-c4 {
+.locked-c4, .rainbow-with-c4 {
   background-color: #FFDD99;
 }
 

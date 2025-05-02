@@ -1,11 +1,11 @@
-import { GameConfig } from "@/game/patterns/model/config";
-import { Cell, GameState, initialCell, initialGameState, LockableCategoryId, PuzzleSolution } from "@/game/patterns/model/model";
-import { changeColor } from "@/game/patterns/update/changeColor";
-import { checkGroups, checkRainbow, updateActiveColor } from "@/game/patterns/update/checkGroups";
-import { clearNonLockedCells } from "@/game/patterns/update/clearNonLockedCells";
-import { validateGuesses } from "@/game/patterns/update/validateGuesses";
+import { GameConfig } from "@/game/model/config";
+import { Cell, ColorIndex, GameState, initialCell, LockableCategoryId, PuzzleSolution } from "@/game/model/model";
+import { changeColor } from "@/game/update/changeColor";
+import { checkGroups, checkRainbow, updateActiveColor } from "@/game/update/checkGroups";
+import { clearNonLockedCells } from "@/game/update/clearNonLockedCells";
+import { validateGuesses } from "@/game/update/validateGuesses";
 
-export type Action = InitAction | SubmitAction | ChangeColorAction | ClearCells | Exit;
+export type Action = InitAction | SubmitAction | ChangeColorAction | ClearCells  | Test | LoadGame;
 
 export type ChangeColorAction = {
 	type: "CHANGE_COLOR";
@@ -27,28 +27,60 @@ type ClearCells = {
 	type: "CLEAR_CELLS";
 }
 
-type Exit = {
-	type: "EXIT";
+type Test = {
+	type: "TEST";
+	data: any;
+}
+
+type LoadGame = {
+	type: "LOAD_GAME";
+	saveData: GameState;
 }
 
 
+function takesSomeTime() {
+	let x = 0;
+	while(x < 1000) {
+		const y = Array.from({ length: 10000 }, (_, i) => i);
+		y.find((i) => i === x);
+		x++;
+	}
+}
 
-export const gameUpdate = (gameState: GameState, action: Action) => {
+function notInPlay(gameState: GameState){
+	if(gameState.phase !== "play"){
+		console.log("game is not in play, returning game state");
+		return true
+	};
+	return false;
+}
+
+export const gameUpdate= (gameState: GameState, action: Action) : GameState => {
 	switch (action.type) {
+		case "TEST":
+			console.log("test", gameState, action);
+			return structuredClone(gameState);
 		case "INIT":
+			console.log("received init action", gameState, gameState.phase);
 			return createNewGame(gameState, action);
 		
 		case "SUBMIT":
-			return submitAnswer(gameState, action);
+			if(notInPlay(gameState)) return structuredClone(gameState);
+			return submitAnswer(gameState);
 		
 		case "CHANGE_COLOR":
-			return isValidSubmit(changeColor(gameState, action));
+			if(notInPlay(gameState)) return structuredClone(gameState)
+			console.time("changeColor");
+			const res = isValidSubmit(changeColor(gameState, action));
+			console.log(gameState.colorCycle);
+			console.timeEnd("changeColor");
+			return res;
 
 		case "CLEAR_CELLS":
+			if(notInPlay(gameState)) return structuredClone(gameState);
 			return clearNonLockedCells(gameState);
-
-		case "EXIT":
-			return exitGame(gameState);
+		case "LOAD_GAME":
+			return loadGame(gameState, action);
 
 		default:
 			throw new Error("Invalid action type");
@@ -57,8 +89,11 @@ export const gameUpdate = (gameState: GameState, action: Action) => {
 
 
 function createNewGame(gameState: GameState, action: InitAction) {
-	if(gameState.phase !== "init") throw new Error("Game already initialized");
 	const newGameState = structuredClone(gameState);
+	if(gameState.phase !== "init") {
+		console.log("undiagnosable multuple init actions bug");
+		return newGameState;
+	}
 	newGameState.cells = createCells(action.puzzle, action.gameConfig);
 	newGameState.puzzleId = action.puzzle.id;
 	newGameState.puzzleSolution = action.puzzle;
@@ -90,7 +125,7 @@ function createCells(puzzle: PuzzleSolution, gameConfig: GameConfig) : Cell[] {
 	return cells;
 }
 
-function submitAnswer(gameState: GameState, action: SubmitAction) {
+function submitAnswer(gameState: GameState) {
 	if(gameState.phase !== "play") {
 		console.log("Game is not in play");
 		return gameState;
@@ -139,12 +174,12 @@ function checkWrongGuesses(gameState: GameState) : GameState {
 }
 
 export function isValidSubmit(gameState: GameState){
-	const testGameState = submitAnswer(gameState, {type: "SUBMIT"});
+	const testGameState = submitAnswer(gameState);
 	gameState.submitValid = true;
 	if(testGameState.submitError) {
 		gameState.submitValid = false;
 	}
-	console.log("isValidSubmit", gameState.submitValid, testGameState.submitError);
+	//console.log("isValidSubmit", gameState.submitValid, testGameState.submitError);
 	return gameState;
 }
 
@@ -156,6 +191,7 @@ function checkLives(gameState: GameState): GameState {
 		gameState.cells.forEach((cell) => {
 			cell.locked = true;
 			if (cell.groupId === "rainbow") cell.colorName = "cRainbow";
+			if (cell.groupId !== 'rainbow') cell.lockedColor = `c${String(cell.groupId + 1)}` as ColorIndex;
 			//if (typeof cell.groupId === "number") cell.colorName = `c${cell.groupId +1}` as ColorIndex;
 			cell.lockedGroup = cell.groupId;
 		});
@@ -168,8 +204,7 @@ function checkLives(gameState: GameState): GameState {
 	return gameState;
 }
 
-function exitGame(gameState: GameState): GameState {
-	console.log("exiting game");
-	const newGameState = structuredClone(initialGameState);
-	return newGameState;
+function loadGame(gameState: GameState, action: LoadGame) {
+	console.log("loading game", action.saveData);
+	return structuredClone(action.saveData);
 }

@@ -1,5 +1,5 @@
-import { ColorIndex, GameState } from "@/game/patterns/model/model";
-import { ChangeColorAction } from "@/game/patterns/update/gameUpdate";
+import { ColorIndex, GameState } from "@/game/model/model";
+import { ChangeColorAction } from "@/game/update/gameUpdate";
 
 
 export function changeColor(gameState: GameState, action: ChangeColorAction): GameState {

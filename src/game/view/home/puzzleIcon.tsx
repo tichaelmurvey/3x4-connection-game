@@ -1,4 +1,4 @@
-import { Phase } from "@/game/patterns/model/model";
+import { Phase } from "@/game/model/model";
 import { AspectRatio, Center, SimpleGrid } from "@mantine/core";
 
 export default function PuzzleIcon({ status }: { status: Phase | undefined }) {
@@ -33,8 +33,16 @@ function PuzzlePlayIcon() {
 function PuzzleLostIcon() {
 	return (
 		<AspectRatio ratio={1}>
-		<SimpleGrid cols={1} spacing="xs">
-			<Center className="draggable" fz={30}>💥</Center>
+		<SimpleGrid cols={3} spacing="xs">
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
+			<Center className="draggable" fz={20}>💥</Center>
 			{/* <div className="draggable"></div>
 			<div className="draggable"></div>
 			<div className="draggable"></div>

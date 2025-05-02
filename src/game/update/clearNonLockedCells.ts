@@ -1,4 +1,4 @@
-import { GameState } from "@/game/patterns/model/model";
+import { GameState } from "@/game/model/model";
 
 export function clearNonLockedCells(gameState: GameState): GameState {
 	console.log("checking non-locked cells");

@@ -1,4 +1,4 @@
-import { GameState, LockableCategoryId } from "@/game/patterns/model/model";
+import { GameState, LockableCategoryId } from "@/game/model/model";
 
 export function checkGroups(gameState: GameState): GameState {
 	for (let groupId = 0; groupId < gameState.puzzleSolution!.groups.length; groupId++) {
@@ -21,10 +21,12 @@ export function checkGroups(gameState: GameState): GameState {
 			rainbowCell.colorName = 'cRainbow';
 			gameState.groupStatus["rainbow"] = 'cRainbow';
 		}
+		
 		gameState.groupStatus[groupId] = groupCells[0].colorName;
 		[groupCells[0], groupCells[1]].forEach((cell) => {
 			cell.locked = true;
 			cell.lockedGroup = groupId as LockableCategoryId;
+			cell.lockedColor = cell.colorName;
 		});
 	}
 	//check if all groups have been solved
@@ -63,10 +65,10 @@ export function checkRainbow(gameState: GameState) {
 
 export function updateActiveColor(gameState: GameState): GameState {
 	if (gameState.colorCycle.length === 1) {
-		console.log("updating active color", gameState.colorCycle, gameState.multiGroupColors);
+		//console.log("updating active color", gameState.colorCycle, gameState.multiGroupColors);
 		gameState.colorCycle = gameState.colorCycle.concat(gameState.multiGroupColors.splice(0, 1));
 	}
-	console.log("updated active color", gameState.colorCycle);
+	//console.log("updated active color", gameState.colorCycle);
 	return gameState;
 }
 

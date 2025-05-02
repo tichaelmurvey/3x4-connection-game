@@ -5,16 +5,15 @@
 //Whether the game is won or not
 //Number of guesses remaining
 
-import { gameConfig } from "@/game/patterns/model/config";
+import { gameConfig } from "@/game/model/config";
 
 export type Cell = {
 	id: number;
-	x: number;
-	y: number;
 	colorName: ColorIndex;
 	groupId: LockableCategoryId;
 	label: string;
 	locked: boolean;
+	lockedColor: ColorIndex | null;
 	lockedGroup: LockableCategoryId | null;
 }
 
@@ -30,7 +29,10 @@ export type PuzzleSolution = {
 }
 
 export type Phase = "init" | "play" | "won" | "lost" | "loading";
-
+export type GroupStatus = {
+	rainbow: false | ColorIndex;
+	[key: number]: false | ColorIndex;
+}
 export type GameState = {
 	phase: Phase;
 	puzzleId: number;
@@ -41,10 +43,7 @@ export type GameState = {
 	multiGroupColors: ColorIndex[];
 	colorCycle: ColorIndex[];
 	rainbowStatus: boolean;
-	groupStatus:  {
-		rainbow: false | ColorIndex;
-		[key: number]: false | ColorIndex;
-	}
+	groupStatus:  GroupStatus;
 	submitError: string | null;
 	submitValid: boolean;
 	puzzleSolution: PuzzleSolution | null;
@@ -74,11 +73,10 @@ export const initialGameState: GameState = {
 
 export const initialCell: Cell = {
 	id: -1,
-	x: 0,
-	y: 0,
 	colorName: "cNeutral",
 	label: "",
 	groupId: 0,
 	locked: false,
 	lockedGroup: null,
+	lockedColor: null,
 }

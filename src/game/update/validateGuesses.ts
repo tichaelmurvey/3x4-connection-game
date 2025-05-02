@@ -1,4 +1,4 @@
-import { GameState } from "@/game/patterns/model/model";
+import { GameState } from "@/game/model/model";
 
 export function validateGuesses(gameState: GameState): GameState {
 	gameState.submitError = null;
