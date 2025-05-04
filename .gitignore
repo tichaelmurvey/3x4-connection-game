@@ -4,3 +4,4 @@ dist
 puzzles.json
 firebase_key.json
 firebase.ts
+.firebase/*
