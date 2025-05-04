@@ -3,5 +3,4 @@ dist
 .parcel-cache
 puzzles.json
 firebase_key.json
-firebase.ts
 .firebase/*
