@@ -9,7 +9,6 @@ export default function ChoosePuzzle() {
 	const [puzzles, setPuzzles] = useState<PuzzleSolution[]>([]);
 	const [puzzlesData] = useLocalStorage<PuzzleSolution[]>('puzzlesData');
 	const [gamesData] = useLocalStorage<GameState[]>('gamesData', []);
-	// const {puzzlesData, gamesData} = cookies as {puzzlesData?: PuzzleSolution[], gamesData?: GamesWonOrLost};
 
 	useEffect(() => {
 		puzzlesData && puzzlesData.length > 0 && setPuzzles(puzzlesData);
@@ -18,25 +17,26 @@ export default function ChoosePuzzle() {
 	if (puzzles.length === 0) {
 		return <div>Loading...</div>;
 	}
-	const puzzleCards = puzzles.map((puzzle, i) => {
-		const status = gamesData[puzzle.id]?.phase;
+	const puzzleCards = puzzles.map((puzzle) => {
+		const puzzleIndex = puzzle.id;
+		const status = gamesData?.[puzzleIndex]?.phase;
 		const statusMessage = status === "won" ? "✅" : status === "lost" ? "😞" : "";
 		return (
-			<Card key={i} 
+			<Card key={puzzleIndex} 
 			shadow= "sm"
 			padding="lg" 
 			radius="md" 
 			maw={200}
 			withBorder
 			component={Link}
-			to={`/puzzle/${puzzle.id}`}
+			to={`/puzzle/${puzzleIndex}`}
 			className = "puzzle-card"
 			style={{
 				cursor:  "pointer",
 			}}
 			>
 				<PuzzleIcon status={status} />
-				<Title order={3} >Example Puzzle {i + 1} {statusMessage}</Title>
+				<Title order={3} >Example Puzzle {puzzleIndex} {statusMessage}</Title>
 			</Card>
 		)
 	})

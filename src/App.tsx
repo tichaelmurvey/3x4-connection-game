@@ -1,14 +1,16 @@
+import Help from "@/game/view/home/Help";
 import {
-  AppShell,
-  Burger,
-  Group,
-  MantineProvider,
-  UnstyledButton,
+	AppShell,
+	Burger,
+	Group,
+	MantineProvider,
+	Stack,
+	UnstyledButton,
 } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { useDisclosure } from "@mantine/hooks";
 import { CookiesProvider } from "react-cookie";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import "./App.css";
 import "./rainbow.css";
 
@@ -35,20 +37,17 @@ export function App() {
 								size="sm"
 							/>
 							<Group justify="space-between" style={{ flex: 1 }}>
-								<Group ml="xl" gap={0} visibleFrom="sm">
-									<UnstyledButton>Home</UnstyledButton>
-									<UnstyledButton>Blog</UnstyledButton>
-									<UnstyledButton>Contacts</UnstyledButton>
-									<UnstyledButton>Support</UnstyledButton>
+								<Group ml="xl" visibleFrom="sm">
+									<NavLinks />
 								</Group>
 							</Group>
+							<Help />
 						</Group>
 					</AppShell.Header>
 					<AppShell.Navbar py="md" px={4}>
-						<UnstyledButton>Home</UnstyledButton>
-						<UnstyledButton>Blog</UnstyledButton>
-						<UnstyledButton>Contacts</UnstyledButton>
-						<UnstyledButton>Support</UnstyledButton>
+						<Stack>
+						<NavLinks />
+						</Stack>
 					</AppShell.Navbar>
 					<AppShell.Main>
 						<Outlet />
@@ -56,5 +55,18 @@ export function App() {
 				</AppShell>
 			</MantineProvider>
 		</CookiesProvider>
+	);
+}
+
+function NavLinks() {
+	return (
+		<>
+			<UnstyledButton component={Link} to="/">
+				Home
+			</UnstyledButton>
+			<UnstyledButton component={Link} to="https://funwebsite.fun">
+				More fun stuff
+			</UnstyledButton>
+		</>
 	);
 }

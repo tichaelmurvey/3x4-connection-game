@@ -49,7 +49,7 @@ export type GameState = {
 	puzzleSolution: PuzzleSolution | null;
 }
 
-export const initialGameState: GameState = {
+export const initialGameState = {
 	phase: "init",
 	puzzleId: -1,
 	cells: [],
@@ -69,7 +69,7 @@ export const initialGameState: GameState = {
 	submitError: null,
 	submitValid: false,
 	puzzleSolution: null,
-}
+} as const
 
 export const initialCell: Cell = {
 	id: -1,

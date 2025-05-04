@@ -31,7 +31,7 @@ export const ValidMoveContext = createContext<boolean>(false);
 export const CellContext = createContext<Cell[] | null>(null as any);
 
 function createInitialGameState(): GameState {
-	return structuredClone(initialGameState);
+	return structuredClone(initialGameState) as unknown as GameState;
 }
 
 export function Game() {

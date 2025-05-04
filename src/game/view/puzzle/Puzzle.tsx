@@ -1,9 +1,9 @@
 import { gameConfig } from "@/game/model/config";
 import {
 	GameState,
-	initialGameState,
-	PuzzleSolution,
+	PuzzleSolution
 } from "@/game/model/model";
+import { Action } from "@/game/update/gameUpdate";
 import { GameStateContext } from "@/game/view/home/Game";
 import { CategoryRevealer } from "@/game/view/puzzle/CategoryRevealer";
 import { DragDrop } from "@/game/view/puzzle/DragDrop";
@@ -15,7 +15,7 @@ import { DragEndEvent } from "@dnd-kit/core";
 import { arraySwap } from "@dnd-kit/sortable";
 import { InputError } from "@mantine/core";
 import { useLocalStorage, writeStorage } from "@rehooks/local-storage";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { ActionDispatch, useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 export default function Puzzle() {
@@ -28,95 +28,52 @@ export default function Puzzle() {
 
 	const params = useParams();
 	const puzzleId = Number(params.puzzleId);
-	const [savedGame, setSavedGame] = useState<GameState>(
-		puzzleId && gamesData[puzzleId] && isGameState(gamesData[puzzleId])
-			? gamesData[puzzleId]
-			: initialGameState
-	);
+	// const [savedGame, setSavedGame] = useState<GameState>(
+	// 	puzzleId && gamesData[puzzleId] && isGameState(gamesData[puzzleId])
+	// 		? gamesData[puzzleId]
+	// 		: initialGameState
+	// );
 
 	useEffect(() => {
-		loadGame();
-	}, [puzzlesData, savedGame]);
-
-	function loadGame() {
-		console.warn(
-			"attempting to find puzzle data",
-			puzzleId,
-			gameState,
-			puzzlesData
+		loadGame(
+			{
+				puzzleId,
+				gameState,
+				puzzlesData,
+				writeStorage,
+				gamesData,
+			},
+			startGame,
+			gameDispatch
 		);
-		if (!gameState || gameState.puzzleId === -1) {
-			console.log("game state is uninitialized, looking for staged game");
-		}
-		else if (
-			gameState.puzzleId === puzzleId &&
-			["play", "lost", "won"].includes(gameState.phase)
-		) {
-			console.log(
-				"game state is already playing or completed with correct ID, returning without acting"
-			);
-			return;
-		}
-		 else if (gameState.puzzleId !== puzzleId) {
-			console.log(
-				"another puzzle is in gamestate, saving it to localstorage and continuing"
-			);
-			gamesData[gameState.puzzleId] = gameState;
-			writeStorage("gamesData", gamesData);
-		}
-		if (savedGame && savedGame.puzzleId !== puzzleId) {
-			console.log("saved gamestate is for another puzzle, saving it to localstorage and continuing");
-			gamesData[savedGame.puzzleId] = savedGame;
-			writeStorage("gamesData", gamesData);
-		}
+	}, [puzzlesData]);
 
-		if (savedGame && savedGame.puzzleId === puzzleId) {
-			console.log("loading game state from savegame state", savedGame);
-			gameDispatch({ type: "LOAD_GAME", saveData: savedGame });
-			return;
-		} else if (gamesData[puzzleId]) {
-			console.log(
-				"loading game state from localstorage",
-				gamesData[puzzleId]
-			);
-			const verifiedGameState = isGameState(gamesData[puzzleId])
-				? gamesData[puzzleId]
-				: initialGameState;
-			setSavedGame(verifiedGameState);
-			gameDispatch({ type: "LOAD_GAME", saveData: verifiedGameState });
-			return;
-		} else {
-			console.log(
-				"saved gamestate is invalid/not initialized, continuing"
-			);
-		}
-
-		if (!puzzlesData) {
-			console.log("puzzles data not set, waiting");
-			return;
-		}
-		const puzzle = puzzlesData.find((puzzle) => puzzle.id === puzzleId);
-		if (puzzle) {
-			console.log("puzzle found, no valid save, starting game");
-			startGame(puzzle);
-		}
-	}
 	useEffect(() => {
 		//listen for game updates and update gamesData
 		if (gameState.puzzleSolution === null) return;
-		if(!gameState || !gameState.puzzleSolution || !gameState.puzzleSolution.id) return;
+		if(!gameState || gameState.puzzleId === -1 || gameState.puzzleId === undefined) return;
 		if (gameState.phase === "init") return;
-		//console.log(gameState.guessesRemaining, savedGame.guessesRemaining, gameState.groupStatus, savedGame.groupStatus);
+		const savedGame = gamesData[gameState.puzzleId];
+		if(!savedGame) {
+			gamesData[gameState.puzzleId] = gameState;
+			writeStorage("gamesData", gamesData);
+			return;
+		}
+		if(!isGameState(savedGame)) {
+			gamesData[gameState.puzzleId] = gameState;
+			writeStorage("gamesData", gamesData);
+			return;
+		};
 		if (
 			gameState.guessesRemaining === savedGame.guessesRemaining &&
 			gameState.phase === savedGame.phase &&
 			JSON.stringify(gameState.groupStatus) ===
 				JSON.stringify(savedGame.groupStatus)
 		) {
+			console.log("no need to save, all data is the same");
 			return;
 		}
-		gamesData[gameState.puzzleSolution.id] = gameState;
-		setSavedGame(gameState);
+		gamesData[gameState.puzzleId] = gameState;
 		writeStorage("gamesData", gamesData);
 	}, [gameState]);
 
@@ -139,10 +96,10 @@ export default function Puzzle() {
 	);
 
 	function startGame(puzzle: PuzzleSolution) {
+		console.log("starting game now", puzzle.id, puzzleId);
 		gameDispatch({
 			type: "INIT",
 			puzzle: structuredClone(puzzle),
-			initialGameState: structuredClone(initialGameState),
 			gameConfig,
 		});
 		writeStorage("gamesData", {
@@ -156,11 +113,21 @@ export default function Puzzle() {
 		gameState.puzzleId === -1 ||
 		gameState.puzzleId !== puzzleId
 	) {
-		console.log("puzzle not found", gameState, puzzleId);
+		console.log("puzzle not found in gamestate", gameState, puzzleId);
 		//rerun effect after a second
-		setTimeout(() => {
-			loadGame();
-		}, 1000);
+		// setTimeout(() => {
+		// 	loadGame(
+		// 		{
+		// 			puzzleId,
+		// 			gameState,
+		// 			puzzlesData,
+		// 			writeStorage,
+		// 			gamesData,
+		// 		},
+		// 		startGame,
+		// 		gameDispatch
+		// 	);
+		// }, 10000);
 		return <div>Loading...</div>;
 	}
 
@@ -189,4 +156,104 @@ function isGameState(gameState: unknown): gameState is GameState {
 	)
 		return true;
 	return false;
+}
+
+
+type loadGameParams = {
+	puzzleId: number;
+	gameState: unknown;
+	puzzlesData: PuzzleSolution[] | null;
+	writeStorage: (key: string, value: unknown) => void;
+	gamesData: unknown[];
+}
+
+function loadGame(params: loadGameParams, startGame : (puzzle: PuzzleSolution) => void, gameDispatch: ActionDispatch<[action: Action]>) {
+	const {puzzleId, gameState, puzzlesData, gamesData} = params;
+	console.warn(
+		"attempting to find puzzle data",
+		puzzleId,
+		gameState,
+		puzzlesData
+	);
+
+	//check for currently running game
+	const inReducer = tryGameState(params);
+	if(inReducer) return;
+
+	//check for locally saved game
+	const inLocalStorage = tryLocalStorage(params);
+	if(inLocalStorage) {
+		gameDispatch({ type: "LOAD_GAME", saveData: inLocalStorage });
+		return;	
+	}
+
+	//check for puzzles data
+	const usedPuzzlesData = tryPuzzlesData(params);
+	if(!usedPuzzlesData) return;
+
+	startGame(usedPuzzlesData);
+}
+
+function tryGameState(params: loadGameParams) {
+	const {puzzleId, gameState} = params;
+	//check for currently running game
+	if(!isGameState(gameState)) {
+		console.log("game state is not valid");
+		return false;
+	}
+	if(gameState.puzzleId === -1) {
+		console.log("game state is uninitialized");
+		return false;
+	}
+	if (gameState.puzzleId === puzzleId) {
+		console.log("existing game state is good", gameState);
+		return true;
+	}
+	if (gameState.puzzleId !== puzzleId) {
+		console.log("game state is for another puzzle.");
+		return false;
+	}
+}
+
+function tryLocalStorage(params: loadGameParams) {
+	const {puzzleId, gamesData} = params;
+
+	if(!gamesData){
+		console.log("no local game data found");
+		return false;
+	}
+	if(!gamesData[puzzleId]){
+		console.log("no game data found for this puzzle", puzzleId);
+		return false;
+	}
+	const verifiedGameState = gamesData[puzzleId];
+	if(!isGameState(verifiedGameState)){
+		console.log("game data is not valid");
+		return false;
+	}
+	if(verifiedGameState.puzzleId === puzzleId){
+		console.log("loading game state from localstorage", verifiedGameState);
+		return verifiedGameState;
+	}
+	else {
+		console.log("indexes in localstorage are out of sync");
+		return false;
+	}
+}
+
+function tryPuzzlesData(params: loadGameParams) {
+	const {puzzleId, puzzlesData} = params;
+	//check for puzzles data
+	if(!puzzlesData){
+		console.log("local puzzles data not found");
+		return false;
+	}
+
+	const puzzle = puzzlesData.find((puzzle) => puzzle.id === puzzleId);
+	
+	if (!puzzle) {
+		throw new Error("Puzzle not found in puzzles data");
+	}
+	console.log("puzzle found, no valid save, starting game", puzzleId, puzzle.id);
+	return puzzle;
 }

@@ -1,5 +1,5 @@
 import { GameConfig } from "@/game/model/config";
-import { Cell, ColorIndex, GameState, initialCell, LockableCategoryId, PuzzleSolution } from "@/game/model/model";
+import { Cell, ColorIndex, GameState, initialCell, initialGameState, LockableCategoryId, PuzzleSolution } from "@/game/model/model";
 import { changeColor } from "@/game/update/changeColor";
 import { checkGroups, checkRainbow, updateActiveColor } from "@/game/update/checkGroups";
 import { clearNonLockedCells } from "@/game/update/clearNonLockedCells";
@@ -19,7 +19,6 @@ type SubmitAction = {
 type InitAction = {
 	type: "INIT",
 	puzzle: PuzzleSolution;
-	initialGameState : GameState;
 	gameConfig: GameConfig;
 }
 
@@ -89,11 +88,11 @@ export const gameUpdate= (gameState: GameState, action: Action) : GameState => {
 
 
 function createNewGame(gameState: GameState, action: InitAction) {
-	const newGameState = structuredClone(gameState);
-	if(gameState.phase !== "init") {
+	if(gameState.phase !== "init" && gameState.puzzleSolution?.id === action.puzzle.id) {
 		console.log("undiagnosable multuple init actions bug");
-		return newGameState;
+		return structuredClone(gameState);
 	}
+	const newGameState = structuredClone(initialGameState) as unknown as GameState;
 	newGameState.cells = createCells(action.puzzle, action.gameConfig);
 	newGameState.puzzleId = action.puzzle.id;
 	newGameState.puzzleSolution = action.puzzle;
