@@ -1,0 +1,17 @@
+{
+	"id": -33,
+	"rainbow": "Rainbow",
+	"difficulty": "easy",
+	"groups": [
+		["Jolly Roger", "White"],
+		["Week", "Major scale"],
+		["Witch", "Oz"],
+		["Snowblade", "Windshield"]
+	],
+	"connections": [
+		"Famous non-country flags",
+		"Sequences of seven",
+		"Wizard of Oz song topics",
+		"Weather + medieval armament"
+	]
+}

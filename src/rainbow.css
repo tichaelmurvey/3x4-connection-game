@@ -1,71 +1,117 @@
 .draggable {
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: #EBEBEB;
-}
-
-.draggable {
   border: none;
 }
 
 .c1 {
-  border: 10px dashed #A9C4FD;
+  border: 8px dashed #A9C4FD;
+  border-radius: 8px;
+}
+
+.cNeutral:not(.locked-null, .locked-cRainbow) {
+  border: 8px solid #EBEBEB;
+  border-radius: 8px;
 }
 
 .c2 {
-  border: 10px dashed #A1E0AF;
+  border: 8px dashed #A1E0AF;
+  border-radius: 8px;
+}
+
+.cNeutral:not(.locked-null, .locked-cRainbow) {
+  border: 8px solid #EBEBEB;
+  border-radius: 8px;
 }
 
 .c3 {
-  border: 10px dashed #FFC1CF;
+  border: 8px dashed #FFC1CF;
+  border-radius: 8px;
+}
+
+.cNeutral:not(.locked-null, .locked-cRainbow) {
+  border: 8px solid #EBEBEB;
+  border-radius: 8px;
 }
 
 .c4 {
-  border: 10px dashed #FFC145;
+  border: 8px dashed #FFC145;
+  border-radius: 8px;
+}
+
+.cNeutral:not(.locked-null, .locked-cRainbow) {
+  border: 8px solid #EBEBEB;
+  border-radius: 8px;
 }
 
 .locked-cNeutral, .rainbow-with-cNeutral {
   background-color: #EBEBEB;
 }
 
+.locked-cNeutral.cNeutral {
+  border: 8px solid #EBEBEB;
+}
+
 .answer.cNeutral {
   background-color: #EBEBEB;
   border: none;
+  border-radius: 0.5rem;
 }
 
 .locked-c1, .rainbow-with-c1 {
   background-color: #BEDEFC;
 }
 
+.locked-c1.cNeutral {
+  border: 8px solid #BEDEFC;
+}
+
 .answer.c1 {
   background-color: #BEDEFC;
   border: none;
+  border-radius: 0.5rem;
 }
 
 .locked-c2, .rainbow-with-c2 {
   background-color: #c3face;
 }
 
+.locked-c2.cNeutral {
+  border: 8px solid #c3face;
+}
+
 .answer.c2 {
   background-color: #c3face;
   border: none;
+  border-radius: 0.5rem;
 }
 
 .locked-c3, .rainbow-with-c3 {
   background-color: #FCDCE5;
 }
 
+.locked-c3.cNeutral {
+  border: 8px solid #FCDCE5;
+}
+
 .answer.c3 {
   background-color: #FCDCE5;
   border: none;
+  border-radius: 0.5rem;
 }
 
 .locked-c4, .rainbow-with-c4 {
   background-color: #FFDD99;
 }
 
+.locked-c4.cNeutral {
+  border: 8px solid #FFDD99;
+}
+
 .answer.c4 {
   background-color: #FFDD99;
   border: none;
+  border-radius: 0.5rem;
 }
 
 .puzzle-card:focus-visible {

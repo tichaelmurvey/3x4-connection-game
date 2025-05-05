@@ -8,18 +8,17 @@ export function CategoryRevealer({ gameState }: { gameState: GameState; }) {
 	const revealers = useMemo(() => connections.map((connection, i) => {
 		if (!gameState.groupStatus[i]) return null;
 		return (
-		<div key={i}>
-			{(
 				<Box
 					key={i}
 					fw={500}
-					p="sm"
+					fz="sm"
+					ta="center"
+					p="0.4rem"
+					flex="1 1 fit-content"
 					className={`answer ${gameState.groupStatus[i]}`}
 					>
 					{connection}
 				</Box>
-			)}
-		</div>
 		);
 }), [gameState.groupStatus, connections]);
 	return (

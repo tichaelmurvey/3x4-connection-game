@@ -13,6 +13,7 @@ export type CellProps = {
 	lockedColor: ColorIndex | null;
 	lockedGroup: LockableCategoryId | null;
 	rainbowLockedColors: string;
+	disabled: boolean;
 	//handleClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
@@ -36,6 +37,7 @@ function SortableItem({
 	lockedGroup,
 	label,
 	rainbowLockedColors,
+	disabled,
 	//handleClick,
 }: CellProps) {
 	const { fontSize, ref: fontSizeRef } = useFitText();
@@ -49,12 +51,14 @@ function SortableItem({
 	
 	return (
 		<ItemFrame 
+		disabled={disabled}
 		//cell={cell} 
 		id={id}>
 				<Center
 					component="button"
 					onClick={(e) => {
 						e.preventDefault();
+						if(disabled) return;
 						gameDispatch({ type: "CHANGE_COLOR", cellId: id });
 					}}
 					style={cellStyle}
@@ -97,10 +101,12 @@ const ItemFrame = memo(function ItemFrame({
 	//cell: cell,
 	id,
 	children,
+	disabled,
 }: {
 	//cell: Cell;
 	id: number;
 	children: React.ReactNode;
+	disabled: boolean;
 }) {
 	const {
 		attributes,
@@ -114,6 +120,7 @@ const ItemFrame = memo(function ItemFrame({
 		//data: cell,
 		animateLayoutChanges: () => false,
 		strategy: rectSwappingStrategy,
+		disabled
 	});
 
 	const transformString = useMemo(
@@ -126,7 +133,7 @@ const ItemFrame = memo(function ItemFrame({
 		transition,
 		width: "100%",
 		height: "100%",
-		touchAction: "none",
+		touchAction: disabled? "auto" : "none",
 		position: "relative",
 		zIndex,
 		padding: 0,

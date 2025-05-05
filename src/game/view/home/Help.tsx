@@ -1,29 +1,57 @@
-import { Avatar, List, ListItem, Modal, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { LongInstructions } from "@/game/view/tutorial/LongInstructions";
+import {
+	Button,
+	Center,
+	Modal,
+	Stack,
+	UnstyledButton
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { BsQuestionCircleFill } from "react-icons/bs";
 
-export default function Help() {
-  const [opened, { open, close }] = useDisclosure(false);
+export default function HelpIcon() {
+	const [opened, { open, close }] = useDisclosure(false);
 
-  return (
-    <>
-      <Modal opened={opened} onClose={close} title={<span style={{fontSize: "1.5rem", fontWeight: "bold"}}>How to play</span>} >
-        <p>Find groups of three words which are part of the same category.</p>
-		<p>One "Rainbow" word is in all four categories.</p>
-		<p>Find all four groups without making three incorrect guesses to win.</p>
-		<h3>Example categories</h3>
-		<List spacing="sm">
-			<ListItem><Text span fw={700}>Colors:</Text> <Text span>Green, Blue, Red</Text> </ListItem>
-			<ListItem><Text span fw={700}>Inexperienced:</Text> <Text span>Green, Fresh, Naive</Text> </ListItem>
-			<ListItem><Text span fw={700}>Environmentally friendly:</Text> <Text span>Green, Eco, Biodegradable</Text> </ListItem>
-			<ListItem><Text span fw={700}>Grass area:</Text> <Text span>Green, Commons, Lawn</Text> </ListItem>
-		</List>
-		<Text>In this puzzle, <Text span fw={700}>Green</Text> is the rainbow.</Text>
-      </Modal>
+	return (
+		<>
+			<HelpModal opened={opened} close={close} />
+			<UnstyledButton onClick={open}>
+				<Center>
+					<BsQuestionCircleFill size={20} />
+				</Center>
+			</UnstyledButton>
+		</>
+	);
+}
 
-      <Avatar component="button" variant="default" onClick={open}>
-	  <BsQuestionCircleFill />
-      </Avatar>
-    </>
-  );
+export function HelpButton() {
+	const [opened, { open, close }] = useDisclosure(false);
+
+	return (
+		<>
+			<Button onClick={open}>
+				How to play
+			</Button>
+			<HelpModal opened={opened} close={close} />
+		</>
+	);
+}
+
+export function HelpModal({ opened, close }: { opened: boolean, close: () => void }) {
+	return (
+		<Modal
+		opened={opened}
+		onClose={close}
+		title={
+			<span style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+				How to play
+			</span>
+		}>
+		<Stack>
+		<LongInstructions />
+		<Button onClick={close}>Back to puzzle</Button>
+		</Stack>
+	</Modal>
+
+	)
 }

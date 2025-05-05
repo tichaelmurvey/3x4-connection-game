@@ -1,26 +1,30 @@
 import { Cell } from "@/game/model/model";
 import { CellContext, GameStateContext } from "@/game/view/home/Game";
 import { SortableItem } from "@/game/view/puzzle/Draggable";
-import { SimpleGrid } from "@mantine/core";
+import { AspectRatio, SimpleGrid } from "@mantine/core";
 import { memo, useContext, useMemo } from "react";
 
 export function GridBoard({ itemIds }: { itemIds: number[] }) {
 
 	return (
+		<AspectRatio ratio={1}
+			h="min(500px, 90vw)"
+			w="min(100%)"
+		>
 			<SimpleGrid
 				cols={3}
 				style={{
 					justifyContent: "center",
 					//alignItems: "stretch",
 					gap: 10,
-					width: "min(500px, 100%)",
-					minWidth: "min(500px, 90%)",
+					width: "100%",
 					height: "min(500px, 90vw)",
 					gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 					gridTemplateRows: "repeat(3, minmax(0, 1fr))",
 				}}>
 				<RenderCells itemIds={itemIds} />
 			</SimpleGrid>
+			</AspectRatio>
 	);
 }
 
@@ -69,6 +73,7 @@ const CellWrapper = memo(function CellWrapper({ id, cell, rainbowLockedColors=""
 			key={id}
 			{...cell}
 			rainbowLockedColors={rainbowLockedColors}
+			disabled={false}
 		/>
 	)
 	}, (prevProps, nextProps) => prevProps.cell.colorName === nextProps.cell.colorName && prevProps.cell.locked === nextProps.cell.locked );

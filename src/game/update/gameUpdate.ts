@@ -102,7 +102,8 @@ function createNewGame(gameState: GameState, action: InitAction) {
 }
 
 function createCells(puzzle: PuzzleSolution, gameConfig: GameConfig) : Cell[] {
-	const labelsAndGroups = puzzle.groups.flatMap((group, groupId) => group.map((label) => ({label, groupId})));
+	const labelsAndGroups : {label: string, groupId: LockableCategoryId}[] = puzzle.groups.flatMap((group, groupId) => group.map((label) => ({label, groupId: groupId as LockableCategoryId})));
+	labelsAndGroups.push({label: puzzle.rainbow, groupId: "rainbow"});
 	//shuffle labels
 	labelsAndGroups.sort(() => Math.random() - 0.5);
 	const cells : Cell[] = labelsAndGroups.map((labelAndGroup, cellId) => {
