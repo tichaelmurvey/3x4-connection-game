@@ -1,4 +1,5 @@
 import { App } from "@/App";
+import About from "@/game/view/home/About";
 import ChoosePuzzle from "@/game/view/home/ChoosePuzzle";
 import { Game } from "@/game/view/home/Game";
 import Puzzle from "@/game/view/puzzle/Puzzle";
@@ -20,6 +21,7 @@ export default function RouteManager() {
 						<Route path="/puzzle/:puzzleId" element={<Puzzle />} />
 					</Route>
 					<Route path="/tutorial" element={<LongInstructions />} />
+					<Route path="/about" element={<About />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
