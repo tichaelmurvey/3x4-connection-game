@@ -1,5 +1,6 @@
 @use "sass:map";
-$borderSize: 10px;
+$borderSize: 8px;
+$radius: 8px;
 
 $blue-light: #BEDEFC;
 $blue-dark: #A9C4FD;
@@ -53,32 +54,36 @@ $bordersMap : (
 .draggable {
 	border-radius: $borderSize;
 	background-color: $cNeutral;
-	//border: $borderSize solid $cNeutral;
-}
-
-.draggable {
 	border: none;
+	//border: $borderSize solid $cNeutral;
 }
 
 @each $name, $color in $bordersMap {
   .#{$name} {
 	border: $borderSize dashed $color;
+	border-radius: $radius;
+  }
+  .cNeutral:not(.locked-null, .locked-cRainbow ){
+	border: $borderSize solid $cNeutral;
+	border-radius: $radius;
   }
 }
 
+
 @each $name, $color in $backgroundsMap {
-  .locked-#{$name}, .rainbow-with-#{$name} {
+  .locked-#{$name}, .rainbow-with-#{$name}{
     background-color: $color;
-	// &.cNeutral{
-	// 	border: $borderSize solid $color;
-	// }
 	//border: none;
-	//border: $borderSize solid $color;
   }
+  .locked-#{$name}.cNeutral{
+	border: $borderSize solid $color;
+} 
   .answer.#{$name} {
 	background-color: $color;
 	border: none;
+	border-radius: 0.5rem;
 }
+
 }
 
 
@@ -99,19 +104,6 @@ $bg4: map.get($c4, "light");
 		nth($keys, -1) 0deg,
 		);
   }  
-
-//   .rainbow-with-c1 {
-// 	@include gradient($bg1);
-//   }
-//   .rainbow-with-c2 {
-// 	@include gradient($bg2);
-//   }
-//   .rainbow-with-c3 {
-// 	@include gradient($bg3);
-//   }
-//   .rainbow-with-c4 {
-// 	@include gradient($bg4);
-//   }
   
   .rainbow-with-c1.rainbow-with-c2 {
 	@include gradient($bg1, $bg2);

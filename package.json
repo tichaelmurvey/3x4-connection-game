@@ -7,7 +7,7 @@
     "sass": "sass --watch src/rainbow.scss src/rainbow.css",
     "start": "concurrently --kill-others \"npm run sass\" \"npx parcel\"",
     "build": "parcel build",
-    "upload": " node ./src/game/patterns/data/upload.js"
+    "upload": " node ./src/game/data/upload.js"
   },
   "alias": {
     "process": false

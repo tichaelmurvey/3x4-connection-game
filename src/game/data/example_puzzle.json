@@ -1,0 +1,17 @@
+{
+	"id": 0,
+	"rainbow": "Green",
+	"difficulty": "easy",
+	"groups": [
+		["Blue", "Red"],
+		["Fresh", "Naive"],
+		["Eco", "Bio-degradable"],
+		["Commons", "Lawn"]
+	],
+	"connections": [
+		"Colors",
+		"Inexperienced",
+		"Environmentally friendly",
+		"Grass area"
+	]
+}
