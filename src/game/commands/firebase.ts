@@ -8,15 +8,8 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-	apiKey: "AIzaSyBFaTRxazWCD_uUz_lEpJTfdOTNObdTbBE",
-	authDomain: "connections-d6358.firebaseapp.com",
-	projectId: "connections-d6358",
-	storageBucket: "connections-d6358.firebasestorage.app",
-	messagingSenderId: "990575515645",
-	appId: "1:990575515645:web:25a4822db8aaf7614e2b94",
-	measurementId: "G-48PG418GRX"
-  };
-  
+	//your config here
+};
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
