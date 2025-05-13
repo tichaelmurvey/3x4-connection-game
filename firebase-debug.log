@@ -1,0 +1,49 @@
+[debug] [2025-05-13T03:22:57.180Z] ----------------------------------------------------------------------
+[debug] [2025-05-13T03:22:57.181Z] Command:       /usr/local/bin/firebase /home/michael/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase deploy
+[debug] [2025-05-13T03:22:57.182Z] CLI Version:   14.3.1
+[debug] [2025-05-13T03:22:57.182Z] Platform:      linux
+[debug] [2025-05-13T03:22:57.182Z] Node Version:  v20.18.2
+[debug] [2025-05-13T03:22:57.182Z] Time:          Tue May 13 2025 13:22:57 GMT+1000 (Australian Eastern Standard Time)
+[debug] [2025-05-13T03:22:57.182Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-13T03:22:57.312Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-13T03:22:57.312Z] > authorizing via signed-in user (michaelturvey97@gmail.com)
+[debug] [2025-05-13T03:22:57.312Z] [iam] checking project connections-d6358 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-13T03:22:57.313Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:22:57.313Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:22:57.313Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/connections-d6358:testIamPermissions [none]
+[debug] [2025-05-13T03:22:57.313Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/connections-d6358:testIamPermissions x-goog-quota-user=projects/connections-d6358
+[debug] [2025-05-13T03:22:57.313Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/connections-d6358:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-13T03:22:58.407Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/connections-d6358:testIamPermissions 200
+[debug] [2025-05-13T03:22:58.407Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/connections-d6358:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-13T03:22:58.408Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:22:58.408Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:22:58.408Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/connections-d6358 [none]
+[debug] [2025-05-13T03:22:59.107Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/connections-d6358 200
+[debug] [2025-05-13T03:22:59.108Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/connections-d6358 {"projectId":"connections-d6358","projectNumber":"990575515645","displayName":"connections","name":"projects/connections-d6358","resources":{"hostingSite":"connections-d6358"},"state":"ACTIVE","etag":"1_2e8054b5-78be-4468-841c-06d306656f10"}
+[info] 
+[info] === Deploying to 'connections-d6358'...
+[info] 
+[info] i  deploying firestore, hosting 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2025-05-13T03:22:59.115Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:22:59.115Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:22:59.116Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/connections-d6358:test [none]
+[debug] [2025-05-13T03:22:59.116Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/connections-d6358:test [omitted]
+[debug] [2025-05-13T03:23:00.599Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/connections-d6358:test 200
+[debug] [2025-05-13T03:23:00.600Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/connections-d6358:test {}
+[info] ✔  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2025-05-13T03:23:00.606Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:23:00.606Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:23:00.606Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/connections-d6358/versions [none]
+[debug] [2025-05-13T03:23:00.606Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/connections-d6358/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-05-13T03:23:02.004Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/connections-d6358/versions 200
+[debug] [2025-05-13T03:23:02.004Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/connections-d6358/versions {"name":"projects/990575515645/sites/connections-d6358/versions/34b91f9e4ae7aa95","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2025-05-13T03:23:02.006Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:23:02.006Z] Checked if tokens are valid: true, expires at: 1747110150266
+[info] i  firestore: deploying indexes... 
+[debug] [2025-05-13T03:23:02.007Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:23:02.008Z] Checked if tokens are valid: true, expires at: 1747110150266
+[debug] [2025-05-13T03:23:02.008Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/connections-d6358/releases pageSize=10&pageToken=
+[debug] [2025-05-13T03:23:02.010Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/connections-d6358/databases/(default)/collectionGroups/-/indexes [none]

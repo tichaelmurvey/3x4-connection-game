@@ -1,0 +1,301 @@
+{
+	"puzzles": [
+		{
+			"id": 2,
+			"rainbow": "Curiosity",
+			"difficulty": "easy",
+			"groups": [
+				["Voyager", "Perseverance"],
+				["Herding", "The Bag"],
+				["Trinket", "Novelty"],
+				["Fascination", "Interest"]
+			],
+			"connections": [
+				"Mars probes",
+				"From cat-related idioms",
+				"Odd item",
+				"Desire to learn"
+			]
+		},
+		{
+			"id": 3,
+			"rainbow": "Brick",
+			"difficulty": "easy",
+			"groups": [
+				["Wood", "Straw"],
+				["Crash", "Fry"],
+				["Technic beam", "Stud"],
+				["iPhone", "Envelope"]
+			],
+			"connections": [
+				"Pig house materials",
+				"Ruin, for electronics",
+				"Lego pieces",
+				"Rectangular"
+			]
+		},
+		{
+			"id": 4,
+			"rainbow": "Squeeze",
+			"difficulty": "medium",
+			"groups": [
+				["Peel", "Grate"],
+				["Crush", "Beau"],
+				["Extort", "Bleed"],
+				["Hold", "Shake"]
+			],
+			"connections": [
+				"Done to a lemon",
+				"Love interest",
+				"Demand money from",
+				"Done by hands"
+			]
+		},
+		{
+			"id": 5,
+			"rainbow": "Duck",
+			"difficulty": "easy",
+			"groups": [
+				["Wicket", "Run"],
+				["Soap", "Loofa"],
+				["Martian", "Coyote"],
+				["Marco", "Simon"]
+			],
+			"connections": [
+				"Cricket terms",
+				"Found in a bath",
+				"Looney Tunes species",
+				"First word of children's games"
+			]
+		},
+		{
+			"id": 6,
+			"rainbow": "Carrot",
+			"difficulty": "easy",
+			"groups": [
+				["Lure", "Spur"],
+				["Lemon", "Black Forest"],
+				["Sticks", "Scarf"],
+				["Pumpkin", "Basketball"]
+			],
+			"connections": [
+				"Incentives",
+				"Cakes",
+				"Snowman parts",
+				"Orange things"
+			]
+		},
+				{
+			"id": 1,
+			"rainbow": "Till",
+			"difficulty": "medium",
+			"groups": [
+				["Water", "Pick"],
+				["Ago", "By"],
+				["Register", "Safe"],
+				["Bens", "Er"]
+			],
+			"connections": [
+				"Agricultural tasks",
+				"Temporal prepositions",
+				"Place to store cash",
+				"Ben Stiller"
+			]
+		},
+		{
+			"id": 7,
+			"rainbow": "Go",
+			"difficulty": "easy",
+			"groups": [
+				["Chance", "Jail"],
+				["Risk", "Clue"],
+				["Exit", "Bail"],
+				["X", "Scarlet"]
+			],
+			"connections": [
+				"Monopoly squares",
+				"Classic board games",
+				"Leave",
+				"Pokemon games"
+			]
+		},
+		{
+			"id": 8,
+			"rainbow": "360",
+			"difficulty": "hard",
+			"groups": [
+				["One", "Series X"],
+				["Boys", "365"],
+				["180", "Ollie"],
+				["2π", "1"]
+			],
+			"connections": [
+				"Xbox models",
+				"Charli XCX songs",
+				"Skateboard tricks",
+				"Circle, in different units"
+			]
+		},
+		{
+			"id": 9,
+			"rainbow": "Penguin",
+			"difficulty": "medium",
+			"groups": [
+				["Joker", "Poison Ivy"],
+				["Mime", "Magpie"],
+				["Bill Nye", "Young Sheldon"],
+				["Mr Wormwood", "The Lorax"]
+			],
+			"connections": [
+				"Batman villains",
+				"Black and white",
+				"Famous bow-tie wearers",
+				"Danny DeVito roles"
+			]
+		},
+		{
+			"id": 10,
+			"rainbow": "Sam",
+			"difficulty": "easy",
+			"groups": [
+				["Scrooge McDuck", "Fester"],
+				["App", "Nok"],
+				["Cat", "Blue Fish"],
+				["Jeeves", "Smithers"]
+			],
+			"connections": [
+				"Uncles",
+				"First part of smartphone brands",
+				"Dr Seuss Characters",
+				"Fictional manservants"
+			]
+		},
+		{
+			"id": 11,
+			"rainbow": "Grass",
+			"difficulty": "hard",
+			"groups": [
+				["Tide Pod", "Silica"],
+				["Acid", "Molly"],
+				["Knife", "Wesley Snipes"],
+				["Screen", "Down"]
+			],
+			"connections": [
+				"Don't eat it!",
+				"Slang for drugs",
+				"Can be called 'blade'",
+				"Touch ___"
+			]
+		},
+		{
+			"id": 12,
+			"difficulty": "hard",
+			"rainbow": "Galileo",
+			"groups": [
+				["Jordan", "Bethany"],
+				["Beelzebub", "Mama"],
+				["Halley", "Eratosthenes"],
+				["Smeagol", "Brunhild"]
+			],
+			"connections": [
+				"Names from biblical locations",
+				"Bohemian Rhapsody characters",
+				"Astronomers",
+				"Discovered rings"
+			]
+
+		},
+		{
+			"id": 13,
+			"difficulty": "hard",
+			"rainbow": "William",
+			"groups": [
+				["Dante", "Nicolo"],
+				["Aegon", "Kang"],
+				["Millicent", "Lillian"],
+				["Mia", "Big"]
+			],
+			"connections": [
+				"Rennaisance writers",
+				"The conqueror",
+				"Nicknamed with -illy",
+				"Rappers minus periods"
+			]
+
+		},
+		{
+			"id": 14,
+			"rainbow": "Cake",
+			"difficulty": "hard",
+			"groups": [
+				["Helmets", "Napoleon"],
+				["Space", "Cat"],
+				["Balloons", "Hats"],
+				["Onions", "Hair"]
+			],
+			"connections": [
+				"Subjects of historical misconceptions",
+				"____ walk",
+				"Found at a birthday party",
+				"Things with layers"
+			]
+
+		},
+		{
+			"id": 15,
+			"rainbow": "Skip",
+			"difficulty": "medium",
+			"groups": [
+				["Reverse", "Wild"],
+				["Crunch", "Shadowbox"],
+				["Can", "Dump"],
+				["Play", "Subscribe"]
+			],
+			"connections": [
+				"Uno cards",
+				"Exercises for boxers",
+				"Places for trash",
+				"Buttons on Youtube"
+			]
+
+		},
+		{
+			"id": 16,
+			"rainbow": "Evil",
+			"difficulty": "medium",
+			"groups": [
+				["Wicked", "Wrong"],
+				["Robotnik", "Doom"],
+				["Hgual", "Evol"],
+				["Grateful", "Living"]
+			],
+			"connections": [
+				"Immoral",
+				"Villain Drs",
+				"Live, Laugh, Love backwards",
+				"___ Dead"
+			]
+
+		},
+		{
+			"id": 17,
+			"rainbow": "Drift",
+			"difficulty": "medium",
+			"groups": [
+				["Bank", "Blanket"],
+				["Breath", "Eye"],
+				["Item", "Brake"],
+				["Hard", "Fire"]
+			],
+			"connections": [
+				"Piles of snow",
+				"Catch my ___",
+				"Mario Kart actions",
+				"Types of wood"
+			]
+
+		}
+
+		
+	]
+}
