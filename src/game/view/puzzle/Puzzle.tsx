@@ -1,3 +1,4 @@
+import { reportGameData } from "@/game/commands/firebase";
 import TutorialPuzzle from "@/game/data/tutorial_puzzle.json";
 import { gameConfig } from "@/game/model/config";
 import { GameState, PuzzleSolution } from "@/game/model/model";
@@ -84,7 +85,15 @@ export default function Puzzle() {
 		)
 			return;
 		if (gameState.phase === "init") return;
+
 		const savedGame = localGameStates[gameState.puzzleId];
+		if((gameState.phase === "won" || gameState.phase === "lost")
+			&& isGameState(savedGame) && savedGame.phase !== gameState.phase
+		) {
+			console.log("reporting win or loss", gameState.phase, savedGame.phase)
+			reportGameData(gameState.puzzleSolution.id, gameState.phase === "won" ? "win" : "loss");
+		}
+
 		if (!savedGame) {
 			localGameStates[gameState.puzzleId] = gameState;
 			writeStorage("gamesData", localGameStates);
@@ -98,8 +107,8 @@ export default function Puzzle() {
 		if (
 			gameState.guessesRemaining === savedGame.guessesRemaining &&
 			gameState.phase === savedGame.phase &&
-			JSON.stringify(gameState.groupStatus) ===
-				JSON.stringify(savedGame.groupStatus)
+			JSON.stringify(gameState) ===
+				JSON.stringify(savedGame)
 		) {
 			console.log("no need to save, all data is the same");
 			return;
@@ -127,15 +136,20 @@ export default function Puzzle() {
 	);
 
 	function startGame(puzzle: PuzzleSolution) {
+		console.log("writing storage");
+		writeStorage("gamesData", {
+			...localGameStates,
+			[puzzle.id]: { status: "play" },
+		});
+		
+		console.log("reporting game");
+		reportGameData(puzzle.id, "attempt");
+		
 		console.log("starting game now", puzzle.id, puzzleId);
 		gameDispatch({
 			type: "INIT",
 			puzzle: structuredClone(puzzle),
 			gameConfig,
-		});
-		writeStorage("gamesData", {
-			...localGameStates,
-			[puzzle.id]: { status: "play" },
 		});
 	}
 

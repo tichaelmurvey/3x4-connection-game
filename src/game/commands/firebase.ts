@@ -3,8 +3,11 @@ import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import {
 	collection,
+	doc,
 	getDocs,
-	getFirestore
+	getFirestore,
+	increment,
+	updateDoc
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -33,4 +36,22 @@ export async function getAllPuzzles() {
 	const puzzles = puzzleDataWithoutGroups.map((puzzle, index) => ({...puzzle, groups: groupsAsArrays[index]}))
 	//console.log("puzzles", puzzles)
 	return puzzles as PuzzleSolution[];
+}
+
+export async function reportGameData(id: number, stat: "win" | "loss" | "attempt"){
+	console.log("reporting ", stat, "for puzzle", id)
+	
+	if(process.env.NODE_ENV !== "production"){
+		console.log("simulating report but not really sending it");
+		return;
+	}
+
+	const gameRef = doc(database, "tracking", String(id));
+	try {
+		await updateDoc(gameRef, {
+			[stat]: increment(1)
+		})
+	} catch {
+		console.error("failed to update tracking database");
+	}
 }
