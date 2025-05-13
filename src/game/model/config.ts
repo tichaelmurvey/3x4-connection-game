@@ -22,6 +22,7 @@ export type GameConfig = {
 	maxGuesses: number;
 }
 
+export const firstDayEpoch = 1747114018
 // c1: "#FFC1CF", 
 // 		c2: "#E8FFB7", 
 // 		c3: "#B7FFD8", 

@@ -1,6 +1,7 @@
-const admin = require("firebase-admin");
-const serviceAccount = require("./firebase_key.json");
-const puzzles = require("./puzzles.json");
+import { PuzzleSolution } from "@/game/model/model";
+import admin from "firebase-admin";
+import serviceAccount from "./firebase_key.json";
+import puzzles from "./puzzles.json";
 const { project_id: projectId, private_key: privateKey, client_email: clientEmail } = serviceAccount;
 admin.initializeApp({
   credential: admin.credential.cert({projectId, privateKey, clientEmail}),
@@ -13,28 +14,28 @@ admin.initializeApp({
  *  - it has a odd depth
  *  - contains only objects or contains no objects.
  */
-function isCollection(data, path, depth) {
+const isObject = (input: unknown): input is Record<string, unknown> => {
+  return typeof input === 'object' && input !== null;
+};
+
+function isCollection(data : unknown) : data is Record<string, object> {
   if (
-    typeof data != 'object' ||
-    data == null ||
-    data.length === 0 ||
-    isEmpty(data)
+    !isObject(data)
   ) {
     return false;
   }
 
   for (const key in data) {
-    if (typeof data[key] != 'object' || data[key] == null) {
+    if (!isObject(data[key])) {
       // If there is at least one non-object item in the data then it cannot be collection.
       return false;
     }
   }
-
   return true;
 }
 
 // Checks if object is empty.
-function isEmpty(obj) {
+function isEmpty(obj : Record<string, unknown>) {
   for(const key in obj) {
     if(obj.hasOwnProperty(key)) {
       return false;
@@ -43,7 +44,7 @@ function isEmpty(obj) {
   return true;
 }
 
-async function upload(data, path) {
+async function upload(data : Record<string, unknown> , path : string[]) {
   return await admin.firestore()
     .doc(path.join('/'))
     .set(data)
@@ -54,7 +55,7 @@ async function upload(data, path) {
 /**
  *
  */
-async function resolve(data, path = []) {
+async function resolve(data : Record<string, unknown>, path : string[] = []) {
   if (path.length > 0 && path.length % 2 == 0) {
     // Document's length of path is always even, however, one of keys can actually be a collection.
 
@@ -63,10 +64,10 @@ async function resolve(data, path = []) {
 
     for (const key in data) {
       // Resolve each collection and remove it from document data.
-      if (isCollection(data[key], [...path, key])) {
+      if (isCollection(data[key])) {
         // Remove a collection from the document data.
         delete documentData[key];
-        // Resolve a colleciton.
+        // Resolve a collection.
         resolve(data[key], [...path, key]);
       }
     }
@@ -77,12 +78,18 @@ async function resolve(data, path = []) {
       await upload(documentData, path);
     }
   } else {
-    // Collection's length of is always odd.
     for (const key in data) {
+      if(!isObject(data[key])){
+        throw new Error("Expected object, got " + typeof(data[key]))
+      }
       // Resolve each collection.
       await resolve(data[key], [...path, key]);
     }
   }
+}
+
+function generateTrackers(puzzles : PuzzleSolution[]){
+  
 }
 
 resolve(puzzles);

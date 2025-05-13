@@ -3,15 +3,15 @@
 	"rainbow": "Rainbow",
 	"difficulty": "easy",
 	"groups": [
-		["Jolly Roger", "White"],
-		["Week", "Major scale"],
-		["Witch", "Oz"],
+		["Bridge", "Protractor"],
+		["Cloud", "Airplane"],
+		["Witch", "Brain"],
 		["Snowblade", "Windshield"]
 	],
 	"connections": [
-		"Famous non-country flags",
-		"Sequences of seven",
+		"Arc-shaped",
+		"Things in the sky",
 		"Wizard of Oz song topics",
-		"Weather + medieval armament"
+		"Weather + medieval weapon"
 	]
 }
